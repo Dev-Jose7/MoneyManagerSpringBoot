@@ -19,6 +19,8 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     // Crear una nueva transacción
     @Transactional
@@ -65,15 +67,23 @@ public class TransactionService {
         Optional<Transaction> existingTransactionOpt = transactionRepository.findById(id);
         if (existingTransactionOpt.isPresent()) {
             Transaction existingTransaction = existingTransactionOpt.get();
+
+            // Cargar la categoría completa desde el repositorio
+            Category category = categoryRepository.findById(updatedTransaction.getCategory().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+            // Actualizar los campos de la transacción
             existingTransaction.setType(updatedTransaction.getType());
             existingTransaction.setValue(updatedTransaction.getValue());
-            existingTransaction.setCategory(updatedTransaction.getCategory());
+            existingTransaction.setCategory(category); // Asociar la categoría existente
             existingTransaction.setDate(updatedTransaction.getDate());
             existingTransaction.setDescription(updatedTransaction.getDescription());
+
             return transactionRepository.save(existingTransaction);
         }
-        return null;
+        throw new IllegalArgumentException("Transacción no encontrada");
     }
+
 
     // Eliminar una transacción
     public void deleteTransaction(Long id) {

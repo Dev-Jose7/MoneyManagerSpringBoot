@@ -19,6 +19,10 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
+    }
+
     // Consultar categorías por usuario
     public List<Category> findCategoriesByUserId(Long userId) {
         return categoryRepository.findByUser_Id(userId);

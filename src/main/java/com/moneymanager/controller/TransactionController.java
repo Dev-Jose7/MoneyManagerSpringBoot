@@ -1,6 +1,8 @@
 package com.moneymanager.controller;
 
+import com.moneymanager.model.Category;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.service.CategoryService;
 import com.moneymanager.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     // Crear una nueva transacción
     @PostMapping
@@ -76,12 +81,19 @@ public class TransactionController {
         if (updatedTransaction.getValue() <= 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        // Usar el servicio para encontrar la categoría
+        Category category = categoryService.findById(updatedTransaction.getCategory().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+        updatedTransaction.setCategory(category);
+
         Transaction transaction = transactionService.updateTransaction(id, updatedTransaction);
         if (transaction != null) {
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     // Eliminar una transacción
     @DeleteMapping("/{id}")
