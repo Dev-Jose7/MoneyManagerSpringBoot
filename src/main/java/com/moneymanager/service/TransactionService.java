@@ -1,7 +1,10 @@
 package com.moneymanager.service;
 
+import com.moneymanager.model.Category;
 import com.moneymanager.model.Transaction;
+import com.moneymanager.repository.CategoryRepository;
 import com.moneymanager.repository.TransactionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,20 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     // Crear una nueva transacción
+    @Transactional
     public Transaction createTransaction(Transaction transaction) {
+        // Buscar la categoría desde la base de datos
+        Category category = categoryRepository.findById(transaction.getCategory().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+        // Asignar la categoría cargada completamente a la transacción
+        transaction.setCategory(category);
+
+        // Guardar la transacción
         return transactionRepository.save(transaction);
     }
 
