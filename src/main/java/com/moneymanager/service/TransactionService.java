@@ -60,6 +60,7 @@ public class TransactionService {
     }
 
     // Actualizar una transacción existente
+    @Transactional
     public Transaction updateTransaction(Long id, Transaction updatedTransaction) {
         Optional<Transaction> existingTransactionOpt = transactionRepository.findById(id);
         if (existingTransactionOpt.isPresent()) {
