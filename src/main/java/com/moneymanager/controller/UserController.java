@@ -11,9 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,19 +34,14 @@ public class UserController {
 
     // Iniciar sesión
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<UserDTO> login(@Valid @RequestBody LoginRequest loginRequest) {
         User user = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         if (user != null) {
             UserDTO userDTO = userService.getUserDetails(user.getId());
             return ResponseEntity.ok(userDTO);
         }
-
-        // Devuelve un objeto con un mensaje para errores de autenticación
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Credenciales incorrectas. Por favor verifica tu correo y contraseña.");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
 
     // Buscar usuario por ID
     @GetMapping("/{id}")

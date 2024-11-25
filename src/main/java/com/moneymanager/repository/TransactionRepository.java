@@ -13,7 +13,7 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     // Buscar transacciones por el ID del usuario con categorías y usuarios
-    @EntityGraph(attributePaths = {"category", "user"})
+    @EntityGraph(attributePaths = {"category", "category.tag"})
     List<Transaction> findByUser_Id(Long idUser);
 
     // Buscar transacciones por el ID de la categoría
