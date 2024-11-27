@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="registro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="../img/favicon_io/site.webmanifest">
+    <title>Registro | MoneyManager</title>
+</head>
+<body class="bg-light">
+    <header class="encabezado">
+        <div class="encabezado__barra">
+            <div class="encabezado__contenedor contenedor" id="barra">
+                <div class="encabezado__logo">
+                     <h1><span class="encabezado__logo--titulo">Money</span>Manager</h1>
+                </div>
+
+                <div class="encabezado__navegacion" id="menu">
+                    <div class="encabezado__menu">
+                        <a href="../../index.html" class="boton">Inicio</a>
+                        <a href="nosotros.html" class="boton">Nosotros</a>
+                    </div>
+                    
+                    <div class="encabezado__usuario">
+                        <a href="registro.html" class="boton seleccion--verde">Ingresar</a>
+                    </div>
+                </div>
+
+                <button class="btn-icon btn-menu btn-menu-registro" id="menuButton" title="Menú">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Barra de carga -->
+    <div id="loading" class="loading">
+        <div class="logo">
+            <h3>Money<span>Manager</span></h3>
+        </div>
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Sección principal -->
+    <main class="formulario d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px); margin: 10vh 0;">
+        <fieldset class="formulario__contenedor border rounded-4 p-5 shadow-lg bg-white">
+                <legend class="text-center fs-3 fw-bold text-success mb-4">
+                <i class="bi bi-person-plus" style="font-size: 3rem;"></i>
+                </legend>
+
+            <div class="formulario__titulo text-center mb-5">
+                <h1 class="text-dark mb-2">Money Manager</h1>
+                <h4 class="text-muted">App gestora de transacciones personales</h4>
+            </div>
+
+            <div class="formulario__campos d-grid gap-4">
+                <a href="../html/login.html" class="btn btn-success btn-lg py-3">Iniciar sesión</a>
+                <a href="../html/signup.html" class="btn btn-warning btn-lg py-3">Regístrate</a>
+            </div>
+        </fieldset>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer contenedor">
+            <div class="logo">
+                <h3>Money<span>Manager</span></h3>
+            </div>
+            <div class="social-icons">
+                <a href="#" title="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+    
+            <div class="social-icons-github">
+                <a href="https://github.com/Dev-Jose7" target="_blank" title="Dev-Jose7"><p>José</p><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://github.com/ValeriaS22" target="_blank" title="ValeriaS22"><p>Valeria</p><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://github.com/benjamin-mb" target="_blank" title="benjamin-mb"><p>Benjamín</p><i class="fab fa-github fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <script src="../../src/view/index.js" type="module"></script>
+</body>
+</html>

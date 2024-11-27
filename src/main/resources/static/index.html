@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="./assets/img/favicon_io/site.webmanifest">
+    <title>MoneyManager | Online</title>
+</head>
+<body>
+    <header class="encabezado">
+        <div class="encabezado__barra">
+            <div class="encabezado__contenedor contenedor" id="barra">
+                <div class="encabezado__logo">
+                     <h1><span class="encabezado__logo--titulo">Money</span>Manager</h1>
+                </div>
+
+                <div class="encabezado__navegacion" id="menu">
+                    <div class="encabezado__menu">
+                        <a href="index.html" class="boton seleccion--verde">Inicio</a>
+                        <a href="./assets/html/nosotros.html" class="boton">Nosotros</a>
+                    </div>
+                    
+                    <div class="encabezado__usuario">
+                        <a href="./assets/html/registro.html" class="boton seleccion--amarillo">Ingresar</a>
+                    </div>
+                </div>
+
+                <button class="btn-icon btn-menu btn-menu-registro" id="menuButton" title="Menú">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+            
+        </div>
+        
+        <div class="encabezado__banner">
+            <div class="encabezado__opacidad"></div>
+            <div class="encabezado__descripcion contenedor">
+                <div class="encabezado__descripcion--texto">
+                    <h2 class="encabezado__descripcion--elemento">Gestor de gastos</h2>
+                    <p class="encabezado__descripcion--elemento">En un mundo donde cada gasto cuenta, mantener tus finanzas en orden es
+                            más importante que nunca. Somos un gestor de gastos diseñado para
+                            ayudarte a tomar el control de tu dinero de manera sencilla y eficaz.</p>
+                </div>
+                
+                <div class="encabezado__descripcion--logo">
+                    <img src="./assets/img/Logo_icono.png" alt="icono MoneyManager">
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <!-- Barra de carga -->
+    <div id="loading" class="loading">
+        <div class="logo">
+            <h3>Money<span>Manager</span></h3>
+        </div>
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Seccion principal -->
+    <main class="principal">
+        <div class="aboutus-text">
+            <h3 class="aboutus-text">Utilizarla es muy fácil</h3>
+        </div>
+        <div class="aboutus-container contenedor">
+            <div class="about-us">
+                <p>Con nuestra plataforma, podrás monitorear todos tus gastos diarios y mensuales en un solo lugar, 
+                    permitiéndote ver con claridad a dónde va tu dinero 
+                    y cómo puedes optimizarlo.</p>
+            </div>
+        
+            <div class="about-us">
+                <p>El proceso es simple y rápido. Una vez 
+                    registrado, tendrás acceso a todas las 
+                    herramientas que te permitirán gestionar y monitorear tus gastos de 
+                    manera efectiva.</p>
+                    <div>
+                        <a href="#" class="btn seleccion--verde">REGISTRARSE</a>
+                    </div>
+            </div>
+        
+            <div class="about-us">
+                <p>Con funciones intuitivas y personalizadas, llevar el control de tus gastos 
+                    nunca ha sido tan fácil. ¡Empieza hoy y mejora tu salud financiera!</p>
+                <p>Ya sea que busques mejorar tus hábitos de consumo, ahorrar para el futuro o 
+                    simplemente tener un mayor control sobre tus finanzas.</p>
+            </div>
+        </div>
+        
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer contenedor">
+            <div class="logo">
+                <h3>Money<span>Manager</span></h3>
+            </div>
+            <div class="social-icons">
+                <a href="#" title="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+    
+            <div class="social-icons-github">
+                <a href="https://github.com/Dev-Jose7" target="_blank" title="Dev-Jose7"><p>José</p><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://github.com/ValeriaS22" target="_blank" title="ValeriaS22"><p>Valeria</p><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://github.com/benjamin-mb" target="_blank" title="benjamin-mb"><p>Benjamín</p><i class="fab fa-github fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./src/view/index.js" type="module"></script>
+</body>
+</html>

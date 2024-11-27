@@ -1,0 +1,43 @@
+:root{
+    /*Colores*/
+    --primario: #4CAF50;
+    --secundario: #F0C14B;
+    --negro: #000;
+    --blanco: #FFF;
+}
+
+.img_logo{
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
+
+.encabezado__logo--titulo{
+    color: var(--secundario);
+}
+
+.manager{
+    color: var(--primario);
+}
+
+.formulario__contenedor {
+    background-color: rgba(255, 255, 255, 0.85); 
+    border-radius: 15px;
+    padding: 40px;
+}
+
+body {
+    background-image: url('../img/imagenfondologin.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.form-control{
+    font-size: 15px;
+}
+
+.text-danger{
+    font-size: 20px;
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="../img/favicon_io/site.webmanifest">
+    <title>Transacciones | MoneyManager</title>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1><a href="../../index.html">Money<span>Manager</span></a></h1>
+            <div class="header-right">
+                <button class="btn-icon" title="Mi Cuenta" id="account">
+                    <i class="fas fa-user-circle fa-lg"></i>
+                    <p id="nameUser">Mi cuenta</p>
+                </button>
+                <button class="btn-icon" title="Cerrar sesión" id="logout">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                    <p>Cerrar sesión</p>
+                </button>
+                <button class="btn-icon btn-menu" id="menuButton" title="Menú">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Barra de carga -->
+    <div id="loading" class="loading">
+        <div class="logo">
+            <h3>Money<span>Manager</span></h3>
+        </div>
+        <div class="spinner"></div>
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar" id="sidebar">
+            <nav>
+                <ul>
+                    <li><a href="../html/dashboard.html">Dashboard</a></li>
+                    <li><a href="../html/transaction.html" class="active">Transacciones</a></li>
+                    <li><a href="../html/estadisticas.html">Estadisticas</a></li>
+                    <li><a href="../html/account.html">Mi cuenta</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <section class="content">
+
+            <!-- cambio de mes -->
+            <div class="user-panel">
+                <h2 id="titleMain">Consultas de <span>transacciones</span></h2>
+                <div class="custom-select-container">
+                    <select id="month" class="custom-select">
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10" selected>Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Balance -->
+            <div class="overview">
+                <div class="card saldo">
+                    <p>Saldo</p>
+                    <h3 id="saldo">$99900</h3>
+                </div>
+                <div class="card ingresos">
+                    <p>Ingresos</p>
+                    <h3 id="valorIngreso">$99900</h3>
+                </div>
+                <div class="card gastos">
+                    <p>Gastos</p>
+                    <h3 id="valorGasto">$99900</h3>
+                </div>
+            </div>
+
+            <!-- Filter -->
+            <div class="filter">
+                <h3>Filtrar transacciones</h3>
+                <form>
+                    <input type="number" placeholder="Valor minimo (0)" min="0" id="minimoFilter">
+                    <input type="number" placeholder="Valor máximo" min="0" id="maximoFilter">
+    
+                    <select id="tipoFilter" required="">
+                        <option disabled="" selected="">Tipo</option>
+                        <option value="Ingreso">Ingreso</option>
+                        <option value="Gasto">Gasto</option>
+                    </select>
+    
+                    <select id="categoriaFilter" required=""><option disabled="" selected="">Categoría</option><option value="Salario">Salario</option><option value="Arriendo">Arriendo</option><option value="Comisión">Comisión</option><option value="Servicios">Servicios</option><option value="Transporte">Transporte</option><option value="Alimentación">Alimentación</option><option value="Entretenimiento">Entretenimiento</option><option value="Compras">Compras</option><option value="Varios">Varios</option></select>
+    
+                    <input type="date" id="fechaFilter">
+
+                    <div class="filter__botones">
+                        <button id="filter" class="btn-add">Filtrar</button>
+                        <button id="cleanFilter" class="btn-cancel">Limpiar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal -->
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <h3>Editar Transacción</h3>
+                    <form id="transactionForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipo">Tipo</label>
+                                <select name="type" id="tipo">
+                                    <option value="">Seleccione</option>
+                                    <option value="Ingreso">Ingreso</option>
+                                    <option value="Gasto">Gasto</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor">Valor</label>
+                                <input type="number" id="valor" placeholder="Valor">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="categoria">Categoria</label>
+                                <select id="categoria" class="custom-select">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha</label>
+                                <input type="date" id="fecha">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" id="descripcion" placeholder="Descripción" style="height: 50px;">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-add" id="confirmar">Confirmar</button>
+                            <button type="reset" class="btn-cancel cancelar">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="noteModal" class="modal">
+                <div class="modal-content">
+                    <h3>Descripcion de la transacción</h3>
+                    <div id="modalDescription"></div>
+                    <div class="form-actions">
+                        <button class="btn-cancel cancelar">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de transacciones -->
+            <div class="transacciones__pagina"> 
+                <button id="viewAll" class="btn-add btn-viewAll">Ver todas</button>
+
+                <select id="sizePage" class="custom-select">
+                    <option disabled=""># transacciones</option>
+                    <option value="5" selected="">5 por pagina</option>
+                    <option value="10">10 por página</option>
+                    <option value="15">15 por página</option>
+                    <option value="20">20 por página</option>
+                </select>
+
+                <button id="confirmar"></button>
+            </div>
+
+            <!-- Transacciones -->
+            <div class="section-main transacciones">
+                <div class="section-container">
+                    <h3>Lista de ingresos</h3>
+
+                    <div id="campoIngresos">
+                        
+                    </div>
+
+                    <div class="botones__pagina" id="pageIngresos"></div>
+                </div>
+
+                <div class="section-container gastos">
+                    <h3 class="gastos__titulo">Lista de gastos</h3>
+                    <div id="campoGastos">
+                        
+                    </div>
+
+                    <div class="botones__pagina" id="pageGastos"></div>
+                </div>
+
+                <div class="section-container" style="display: none;">
+                    <h3>Lista de todas las transacciones</h3>
+                    <div id="campoTransacciones">
+                        
+                    </div>
+
+                    <div class="botones__pagina" id="pageTransacciones"></div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="logo">
+                    <h3>Money<span>Manager</span></h3>
+                </div>
+                <div class="social-icons">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
+                </div>
+
+                <div class="social-icons-github">
+                    <a href="https://github.com/Dev-Jose7" target="_blank" title="Dev-Jose7"><p>José</p><i class="fab fa-github fa-lg"></i></a>
+                    <a href="https://github.com/ValeriaS22" target="_blank" title="ValeriaS22"><p>Valeria</p><i class="fab fa-github fa-lg"></i></a>
+                    <a href="https://github.com/benjamin-mb" target="_blank" title="benjamin-mb"><p>Benjamín</p><i class="fab fa-github fa-lg"></i></a>
+                </div>
+            </footer>
+
+
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../src/view/dashboard.js" type="module"></script>
+</body>
+</html>
