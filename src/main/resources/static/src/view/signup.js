@@ -27,11 +27,10 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
             password: inputPassword.value
         })).then(response => {
             if(response.ok){
-                response.json().then(data => {
+                response.json().then(user => {
                     statusRegister.textContent = "Registro completado"; // Muestra un mensaje de éxito en el elemento 'statusRegister'.
-                    let user = new User(data.id, data.name, data.email, data.password); // Crea un nuevo objeto 'User' con los datos del obtenidos por el servidor.
-                    Category.getCategoriesUser() = data.categories;
-                    initSession(user);
+                    new User(user.id, user.name, user.email, user.password); // Crea un nuevo objeto 'User' con los datos del obtenidos por el servidor.
+                    initSession(user); //Inicia sesión con el usuario obtenido por el servidor tras crearlo
                 })
             } else {
                 alertShow("Error!", "Usuario no registrado, vuelva a validar los campos", "error");

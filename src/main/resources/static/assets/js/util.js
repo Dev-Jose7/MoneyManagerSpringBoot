@@ -33,17 +33,7 @@ export function initSession(account){
     //Almacena la información del usuario
     sessionStorage.setItem("user", JSON.stringify([{ id: account.id, name: account.name, email: account.email}]))
     sessionStorage.setItem("transactions", JSON.stringify(account.transactions));
-    sessionStorage.setItem("categories", JSON.stringify(account.categories))
-
-    // if(account.categories == null || account.categories == []){
-    //     getData(receiveData("GET", `categories/user/${account.id}`))
-    //         .then(response => {
-    //             if(response.ok){
-    //                 response.json()
-    //                     .then(data => sessionStorage.setItem("categories", JSON.stringify(data))) 
-    //             }
-    //         })
-    // }
+    sessionStorage.setItem("categories", JSON.stringify(account.categories));
 
     // Después de 2 segundos, redirige al usuario a la página del dashboard
     setTimeout(() => {
