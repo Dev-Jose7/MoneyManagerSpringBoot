@@ -28,6 +28,7 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
         })).then(response => {
             if(response.ok){
                 response.json().then(user => {
+                    console.log(user);
                     statusRegister.textContent = "Registro completado"; // Muestra un mensaje de éxito en el elemento 'statusRegister'.
                     new User(user.id, user.name, user.email, user.password); // Crea un nuevo objeto 'User' con los datos del obtenidos por el servidor.
                     initSession(user); //Inicia sesión con el usuario obtenido por el servidor tras crearlo

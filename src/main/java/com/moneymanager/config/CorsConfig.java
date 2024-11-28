@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://moneymanager-online.netlify.app") // URL de tu frontend
+                        .allowedOrigins("http://127.0.0.1:5500/", "https://moneymanager-online.netlify.app") // URL de tu frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
