@@ -173,7 +173,7 @@ export function printCategory() {
 
     if(statusAccount){
         // Ordena las categorías de mayor a menor según la cantidad de transacciones
-        Category.categoriesData.sort((a, b) => {return getTotalCategory(b.tag) - getTotalCategory(a.tag)});
+        Category.getCategoriesUser().sort((a, b) => {return getTotalCategory(b.tag) - getTotalCategory(a.tag)});
         pagination(categoria, pageCategoria, Category.getTagUser(), 3, user.getCategories().printCategories); // Pagina las categorías
     }
 }
@@ -231,7 +231,7 @@ export function paginationDefault(container, buttonContainer, size){
         for (let i = 0; i < diference; i++) {
             let elemento =`
                 <div class="list">
-                    <h4>${statusTransaction ? (transactionByMonth.length == 0 && i == 0 ? "Sin registro" : "") : statusAccount ? (Category.categoriesData.length == 0 && i == 0 ? "Sin registro" : "") : ""}</h4>
+                    <h4>${statusTransaction ? (transactionByMonth.length == 0 && i == 0 ? "Sin registro" : "") : statusAccount ? (Category.getCategoriesUser().length == 0 && i == 0 ? "Sin registro" : "") : ""}</h4>
                     <p></p>
                     <p></p>
                     <p></p>
@@ -313,7 +313,7 @@ export function filterData(data){
         filter = user.getTransactions().getFilter().filter("", "", data, "Categoría", "", transactionByMonth);
     }
 
-    if(Category.categoriesData.find(category => category.tag == data)){
+    if(Category.getCategoriesUser().find(category => category.tag == data)){
         filter = user.getTransactions().getFilter().filter("", "", "Tipo", data, "", transactionByMonth);
     } 
 

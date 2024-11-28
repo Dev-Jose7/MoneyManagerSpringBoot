@@ -2,6 +2,7 @@ import User from "../model/account/User.js"; // Importa la clase User desde el c
 import { alertShow, closeloading, completeInput, confirmPassword, initSession } from "../../assets/js/util.js"; // Importa funciones auxiliares desde un archivo util.js.
 import Transaccion from "../model/operation/Transaccion.js"; // Importa la clase Transaccion desde el controlador de operaciones.
 import { getData, sendData } from "../controller/api.js";
+import Category from "../model/tag/Category.js";
 
 const inputName = document.getElementById("name"); // Referencia al input de nombre en el formulario.
 const inputEmail = document.getElementById("email"); // Referencia al input de email en el formulario.
@@ -29,7 +30,8 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
                 response.json().then(data => {
                     statusRegister.textContent = "Registro completado"; // Muestra un mensaje de éxito en el elemento 'statusRegister'.
                     let user = new User(data.id, data.name, data.email, data.password); // Crea un nuevo objeto 'User' con los datos del obtenidos por el servidor.
-                    initSession(user); // Llama a la función initSession para iniciar la sesión del usuario con los datos proporcionados.
+                    Category.getCategoriesUser() = data.categories;
+                    initSession(user);
                 })
             } else {
                 alertShow("Error!", "Usuario no registrado, vuelva a validar los campos", "error");
@@ -47,6 +49,14 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
     setTimeout(() => {
         statusRegister.textContent = "";
     }, 3000); // El mensaje de estado desaparece después de 3 segundos.
+
+    function statusCategory(category){
+        if(category == null || category == []){
+            return true
+        }
+
+        return false
+    }
 });
 
 // Llama a la función closeloading para cerrar el loading (posiblemente un spinner o mensaje de carga).

@@ -35,15 +35,15 @@ export function initSession(account){
     sessionStorage.setItem("transactions", JSON.stringify(account.transactions));
     sessionStorage.setItem("categories", JSON.stringify(account.categories))
 
-    if(account.categories == null || account.categories == []){
-        getData(receiveData("GET", `categories/user/${account.id}`))
-            .then(response => {
-                if(response.ok){
-                    response.json()
-                        .then(data => sessionStorage.setItem("categories", JSON.stringify(data))) 
-                }
-            })
-    }
+    // if(account.categories == null || account.categories == []){
+    //     getData(receiveData("GET", `categories/user/${account.id}`))
+    //         .then(response => {
+    //             if(response.ok){
+    //                 response.json()
+    //                     .then(data => sessionStorage.setItem("categories", JSON.stringify(data))) 
+    //             }
+    //         })
+    // }
 
     // Después de 2 segundos, redirige al usuario a la página del dashboard
     setTimeout(() => {

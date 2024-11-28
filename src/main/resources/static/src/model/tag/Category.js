@@ -10,9 +10,7 @@ export default class Category {
             this.tag = tag; // Asigna la etiqueta de la categoría.
             Category.categoriesData.push(this); // Agrega la categoría a la lista.
             Category.saveDataSession(); // Guarda la categoría en sessionStorage.
-        } else if(!id && tag){
-            this.categoriesUser = [];
-        }
+        } else if(!id && tag){}
     }
 
     // Método estático para guardar las categorías en sessionStorage.
@@ -33,7 +31,6 @@ export default class Category {
     }
 
     // Métodos para obtener los atributos de la categoría.
-    getCategoriesUser() { return this.categoriesUser; }
     getTag() { return this.tag; }
     getId() { return this.id; }
     getUserId() { return this.user; }

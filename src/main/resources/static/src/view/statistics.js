@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function(){ // Se ejecuta cuando e
         function chartCategory(){
             let label = []; // Arreglo para almacenar las etiquetas (categorías).
             let data = []; // Arreglo para almacenar los valores (total de cada categoría).
-            Category.categoriesData.forEach(category => { // Itera sobre las categorías del usuario.
+            Category.getCategoriesUser().forEach(category => { // Itera sobre las categorías del usuario.
                 let array = filterData(category.tag) // Filtra las transacciones por categoría.
                 label.push(array.length) // Almacena el número de transacciones por categoría en 'label'.
                 
