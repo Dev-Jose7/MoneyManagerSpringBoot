@@ -46,10 +46,16 @@ export default class Transaccion {
 
     // Método estático para cargar las transacciones desde sessionStorage.
     static loadDataSession() {
-        let data = JSON.parse(sessionStorage.getItem("transactions"));
-        for (let i = 0; i < data.length; i++) {
-            new Transaccion(data[i].id, data[i].type, data[i].value, data[i].description, data[i].category, data[i].date)
+        try {
+            let data = JSON.parse(sessionStorage.getItem("transactions"));
+            for (let i = 0; i < data.length; i++) {
+                new Transaccion(data[i].id, data[i].type, data[i].value, data[i].description, data[i].category, data[i].date)
+            }
+        } catch (error) {
+            // Manejo del error si las transacciones no pueden ser cargadas
+            // Esto por si el arreglo (data) esta vacío, ya que si esta vacio la propiedad length no es valida para el arreglo y arrojara error
         }
+
 
         //Carga en la base de datos (transactionData) el elemento almacenado en sessionStorage (gestionado por saveDataSession). Esto con el fin de entregar a la base de datos todos los valores que fueron añadidos a la esta antes de recargar la pagina, esto permite a la base de datos mantenerse actualizada constantemente
         //Función que reconstruye una instancia después de ser transformada nuevamente a su valor original (JSON.parse). Esto debido a que las instancias se encontraban almacenadas en formato JSON (JSON.stringify)

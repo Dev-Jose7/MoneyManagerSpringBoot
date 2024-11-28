@@ -20,10 +20,16 @@ export default class Category {
 
     // Método estático para cargar las categorías desde sessionStorage.
     static loadDataSession() {
-        let tag = JSON.parse(sessionStorage.getItem("categories")); // Parsea las categorías almacenadas.
-        for (let i = 0; i < tag.length; i++) {
-            new Category(tag[i].id, tag[i].tag); // Crea instancias de categorías.
+        try {
+            let tag = JSON.parse(sessionStorage.getItem("categories")); // Parsea las categorías almacenadas.
+            for (let i = 0; i < tag.length; i++) {
+                new Category(tag[i].id, tag[i].tag); // Crea instancias de categorías.
+            }
+        } catch (error) {
+            // Manejo del error si las categorías no pueden ser cargadas
+            // Esto por si el arreglo (tag) esta vacío, ya que si esta vacio la propiedad length no es valida para el arreglo y arrojara error
         }
+
     }
 
     static getCategoriesUser(){
