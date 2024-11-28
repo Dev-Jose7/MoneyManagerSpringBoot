@@ -23,21 +23,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
         let status = completeInput(inputs);  // Verifica si todos los campos requeridos están completos.
 
-        // if (status) {  // Si los campos están completos, intenta validar el usuario.
-        //     let account = User.validateUser(inputEmail.value, inputPassword.value);  // Valida si las credenciales del usuario son correctas.
-        //     console.log(account);  // Muestra los datos del usuario en consola para fines de depuración.
-
-        //     let session = initSession(account);  // Inicia la sesión si las credenciales son correctas.
-
-        //     if (session) {  // Si la sesión se ha iniciado correctamente...
-        //         statusLogin.textContent = "Acceso autorizado";  // Muestra un mensaje de éxito en la interfaz.
-        //     } else {
-        //         statusLogin.textContent = "Credenciales incorrectas";  // Si las credenciales son incorrectas, muestra un error.
-        //     }
-        // } else {
-        //     statusLogin.textContent = "Complete los campos faltantes";  // Si algún campo está vacío, muestra un mensaje de advertencia.
-        // }
-
         if(status){
             getData(sendData("POST", "users/login", {email: inputEmail.value, password: inputPassword.value}))
                 .then(response => {

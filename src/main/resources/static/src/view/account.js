@@ -1,6 +1,7 @@
 import { alertConfirm, logout, menuButton, modalCancel, printCategory, printNameUser, updateListUser, user } from "../../assets/js/panel.js";
 import { alertShow, completeInput, confirmPassword, textCurrency } from "../../assets/js/util.js";
 import { getData, receiveData, sendData } from "../controller/api.js";
+import Transaccion from "../model/operation/Transaccion.js";
 import Category from "../model/tag/Category.js";
 
 // Variable global que indica si el usuario está en la página de la cuenta.
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function(){
         // Muestra las estadísticas de ingresos y gastos del usuario.
         document.getElementById("cantIngreso").textContent = user.getTransactions().getListIngreso().length;
         document.getElementById("cantGasto").textContent = user.getTransactions().getListGasto().length;
-        document.getElementById("cantTransaccion").textContent = user.getTransactions().getListTransaction().length;
+        document.getElementById("cantTransaccion").textContent = Transaccion.getTransactionsUser().length
         document.getElementById("totalIngreso").textContent = textCurrency(user.getTransactions().totalIngreso());
         document.getElementById("totalGasto").textContent = textCurrency(user.getTransactions().totalGasto());
         document.getElementById("saldoNeto").textContent = textCurrency(user.getTransactions().totalIngreso() - user.getTransactions().totalGasto());

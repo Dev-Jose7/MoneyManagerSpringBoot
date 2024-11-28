@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
             e.preventDefault();
             
             // Verifica si todos los campos del formulario son válidos antes de crear la transacción.
-            if(tipo.value != "Tipo" && categoria.value != "Categoría" && valor.value != "" && fecha.value != ""){
+            if(tipo.value != "Seleccione" && categoria.value != "Categoría" && valor.value != "" && fecha.value != ""){
                 getData(sendData("POST", "transactions", {
                     user: {id: user.getId()},
                     type: tipo.value,
