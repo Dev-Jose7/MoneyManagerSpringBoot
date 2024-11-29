@@ -121,10 +121,9 @@ document.addEventListener("DOMContentLoaded", function(){
                 }
             }
 
-            // Si se ingresó un nuevo correo, actualiza el correo del usuario.
+            // Valida si se ingreso un correo
             if(emailUpdate.value != ""){
                 if(emailUpdate.value != user.getEmail()){
-                    user.setEmail(emailUpdate.value);
                     complete = true;
                 } else {
                     alertShow("Error!", "El correo debe ser diferente al actual", "warning");
@@ -154,6 +153,9 @@ document.addEventListener("DOMContentLoaded", function(){
                     
                 })).then(response => {
                     if(response.ok){
+                        if(emailUpdate.value != ""){ // Si se ingresó un nuevo correo, actualiza el correo del usuario.
+                            user.setEmail(emailUpdate.value);
+                        }
                         alertShow("Hecho!", "Sus datos han sido actualizados", "success");
                     } else if(response.status == 406){
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
