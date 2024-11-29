@@ -113,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function(){
             if(nameUpdate.value != ""){
                 if(nameUpdate.value != user.getName()){
                     user.setName(nameUpdate.value);
-                    alertShow("Hecho!", "Su nombre ha sido cambiado", "success");
                     complete = true;
                 } else {
                     alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
@@ -126,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function(){
             if(emailUpdate.value != ""){
                 if(emailUpdate.value != user.getEmail()){
                     user.setEmail(emailUpdate.value);
-                    alertShow("Hecho!", "Su correo ha sido cambiado", "success");
                     complete = true;
                 } else {
                     alertShow("Error!", "El correo debe ser diferente al actual", "warning");
@@ -139,7 +137,6 @@ document.addEventListener("DOMContentLoaded", function(){
             if(passwordUpdate.value != "" && passwordConfirm.value != ""){
                 if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
                     user.setPassword(passwordUpdate.value);
-                    alertShow("Hecho!", "La contraseña ha sido cambiada", "success");
                     complete = true;
                 } else {
                     alertShow("Error!", "Las contraseñas no coinciden", "warning");
@@ -155,7 +152,13 @@ document.addEventListener("DOMContentLoaded", function(){
                     email: emailUpdate.value != "" ? emailUpdate.value : user.getEmail(),
                     password: passwordUpdate.value != "" ? passwordUpdate.value : user.getPassword()
                     
-                }));
+                })).then(response => {
+                    if(response.ok){
+                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
+                    } else if(response.status == 406){
+                        alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
+                    }
+                });
                 document.getElementById("editModal").style.display = "none";
                 printDataUser();
             } 

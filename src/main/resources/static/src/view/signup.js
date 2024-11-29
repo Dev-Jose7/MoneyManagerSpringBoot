@@ -54,7 +54,7 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
                 })
             } else {
                 if(response.status == 406){
-                    alertShow("Error!", "Este correo ya se encuentra registrado, útilice uno valido", "error");
+                    alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                 } else {
                     alertShow("Error!", "Usuario no registrado, vuelva a validar los campos", "error");
                 }
