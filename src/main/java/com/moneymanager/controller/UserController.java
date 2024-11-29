@@ -63,11 +63,16 @@ public class UserController {
     // Actualizar usuario
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
-        User user = userService.updateUser(id, updatedUser);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if(userService.findUserByEmail(updatedUser.getEmail()).isEmpty()){
+            User user = userService.updateUser(id, updatedUser);
+
+            if (user != null) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     // Eliminar usuario
