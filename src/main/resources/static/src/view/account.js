@@ -147,21 +147,22 @@ document.addEventListener("DOMContentLoaded", function(){
                     password: passwordUpdate.value != "" ? passwordUpdate.value : user.getPassword()
                     
                 })).then(response => {// Valida si el usuario hace un cambio de correo por uno valido (no usado por otro usuario)
-                    if(response.ok){ 
+                    if(response.ok){ //Si no se ingreso un nuevo correo, simplemente se cargarán los datos nuevos (nombre y/o contraseña)
                         if(emailUpdate.value != ""){ // Si se ingresó un nuevo correo, actualiza el correo del usuario.
                             user.setEmail(emailUpdate.value);
                         } 
-                        printDataUser(); //Si no se ingreso un nuevo correo, simplemente se cargarán los datos nuevos (nombre y/o contraseña)
                         alertShow("Hecho!", "Sus datos han sido actualizados", "success");
                     } else if(response.status == 406){
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
-                });
 
-                //Se reinician campos del formulario
-                nameUpdate.value = "";
-                emailUpdate.value = "";
-                passwordUpdate.value = "";
+                    printDataUser(); //Imprime las nuevas credenciales al ser actualizadas
+
+                    //Se reinician campos del formulario
+                    nameUpdate.value = "";
+                    emailUpdate.value = "";
+                    passwordUpdate.value = "";
+                });
 
                 document.getElementById("editModal").style.display = "none";
             }
@@ -241,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function(){
         function printDataUser(){
             name.textContent = user.getName();
             email.textContent = user.getEmail();
-            
+
             // Configura los valores por defecto de los campos de actualización con los datos del usuario.
             nameUpdate.placeholder = user.getName();
             emailUpdate.placeholder = user.getEmail();
