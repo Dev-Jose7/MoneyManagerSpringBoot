@@ -30,7 +30,7 @@ export function confirmPassword(password, passwordConfirm){
 
 // Función para iniciar sesión y almacenar la información del usuario en sessionStorage
 export function initSession(account){
-    console.log(account)
+    console.log("Cuenta", account)
     //Almacena la información del usuario
     sessionStorage.setItem("user", JSON.stringify([{ id: account.id, name: account.name, email: account.email}]))
     sessionStorage.setItem("transactions", JSON.stringify(account.transactions));

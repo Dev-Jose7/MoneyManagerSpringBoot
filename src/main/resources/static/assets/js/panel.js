@@ -328,7 +328,6 @@ export function filterData(data){
 export function modalCancel(){
     [...document.querySelectorAll(".cancelar")].forEach(element => {
         element.addEventListener("click", function(e){
-            console.log("click");
             e.target.closest(".modal").style.display = "none"; // Cierra el modal
         });
     });

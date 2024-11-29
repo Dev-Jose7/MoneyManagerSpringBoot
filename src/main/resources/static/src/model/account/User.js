@@ -67,7 +67,6 @@ export default class User {
 
     // Método para imprimir los datos de todos los usuarios en la consola.
     static printUserData() {
-        console.log("Lista de usuarios");
         for (let i = 0; i < User.userData.length; i++) {
             console.log(User.userData[i]);
         }

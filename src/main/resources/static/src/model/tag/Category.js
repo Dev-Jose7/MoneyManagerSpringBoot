@@ -42,13 +42,17 @@ export default class Category {
     getUserId() { return this.user; }
 
     static getTagById(id){
-        let tagName = "";
-        Category.categoriesData.find(category => {
-            if(category.id == id ){
-                tagName = category.tag;
-            }
-        })
-        return tagName
+        if(id != "Categoría"){
+            let tagName = "";
+            Category.categoriesData.find(category => {
+                if(category.id == id ){
+                    tagName = category.tag;
+                }
+            })
+            return tagName
+        }
+        return "Categoría"
+        
     }
 
     static getIdByTag(tag){
