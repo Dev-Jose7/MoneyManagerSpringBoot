@@ -30,12 +30,13 @@ export function confirmPassword(password, passwordConfirm){
 
 // Función para iniciar sesión y almacenar la información del usuario en sessionStorage
 export function initSession(account){
+    console.log(account)
     //Almacena la información del usuario
     sessionStorage.setItem("user", JSON.stringify([{ id: account.id, name: account.name, email: account.email}]))
     sessionStorage.setItem("transactions", JSON.stringify(account.transactions));
     sessionStorage.setItem("categories", JSON.stringify(account.categories));
 
-    // Después de 2 segundos, redirige al usuario a la página del dashboard
+    //Después de 2 segundos, redirige al usuario a la página del dashboard
     setTimeout(() => {
         window.location.href = "dashboard.html";
     }, 2000);
