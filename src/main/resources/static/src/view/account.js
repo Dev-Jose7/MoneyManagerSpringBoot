@@ -39,10 +39,6 @@ document.addEventListener("DOMContentLoaded", function(){
         // Inicializa el nombre y correo del usuario en el apartado de datos personales.
         printDataUser();
         printPassword();
-
-        // Configura los valores por defecto de los campos de actualización con los datos del usuario.
-        nameUpdate.placeholder = user.getName();
-        emailUpdate.placeholder = user.getEmail();
         
         // Muestra las estadísticas de ingresos y gastos del usuario.
         document.getElementById("cantIngreso").textContent = user.getTransactions().getListIngreso().length;
@@ -143,27 +139,32 @@ document.addEventListener("DOMContentLoaded", function(){
                 }
             }
             
-            // Si hubo cambios, cierra el modal de edición y actualiza los datos del usuario en pantalla.
-            
+            // Si hubo cambios, cierra el modal de edición y actualiza los datos del usuario en el servidor y dashboard.
             if(complete){
                 getData(sendData("PUT", `users/${user.getId()}`, {
                     name: nameUpdate.value != "" ? nameUpdate.value : user.getName(),
                     email: emailUpdate.value != "" ? emailUpdate.value : user.getEmail(),
                     password: passwordUpdate.value != "" ? passwordUpdate.value : user.getPassword()
                     
-                })).then(response => {
-                    if(response.ok){
+                })).then(response => {// Valida si el usuario hace un cambio de correo por uno valido (no usado por otro usuario)
+                    if(response.ok){ 
                         if(emailUpdate.value != ""){ // Si se ingresó un nuevo correo, actualiza el correo del usuario.
                             user.setEmail(emailUpdate.value);
-                        }
+                        } 
+                        printDataUser(); //Si no se ingreso un nuevo correo, simplemente se cargarán los datos nuevos (nombre y/o contraseña)
                         alertShow("Hecho!", "Sus datos han sido actualizados", "success");
                     } else if(response.status == 406){
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
                 });
+
+                //Se reinician campos del formulario
+                nameUpdate.value = "";
+                emailUpdate.value = "";
+                passwordUpdate.value = "";
+
                 document.getElementById("editModal").style.display = "none";
-                printDataUser();
-            } 
+            }
         });
 
         // Evento para añadir una nueva categoría.
@@ -240,6 +241,10 @@ document.addEventListener("DOMContentLoaded", function(){
         function printDataUser(){
             name.textContent = user.getName();
             email.textContent = user.getEmail();
+            
+            // Configura los valores por defecto de los campos de actualización con los datos del usuario.
+            nameUpdate.placeholder = user.getName();
+            emailUpdate.placeholder = user.getEmail();
         }
 
         // Función para obtener la contraseña del usuario
