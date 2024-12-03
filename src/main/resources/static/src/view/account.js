@@ -138,24 +138,30 @@ document.addEventListener("DOMContentLoaded", function(){
                 });
             } else { // Si el usuario quiere cambiar solo un dato especifíco
                 // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
-                if(nameUpdate.value != "" && nameUpdate.value != user.getName()){
-                    updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
-                } else {
-                    alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
+                if(nameUpdate.value != ""){
+                    if(nameUpdate.value != user.getName()){
+                        updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
+                    } else {
+                        alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
+                    }
                 }
 
                 // Valida si se ingreso un correo
-                if(emailUpdate.value != "" && emailUpdate.value != user.getEmail()){
-                    updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
-                } else {
-                    alertShow("Error!", "El correo debe ser diferente al actual", "warning");
+                if(emailUpdate.value != ""){
+                    if(emailUpdate.value != user.getEmail()){
+                        updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
+                    } else {
+                        alertShow("Error!", "El correo debe ser diferente al actual", "warning");
+                    }
                 }
                 
                 // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
-                if(passwordUpdate.value != "" && passwordConfirm.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
-                    updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
-                } else {
-                    alertShow("Error!", "Las contraseñas no coinciden", "warning");
+                if(passwordUpdate.value != ""){
+                    if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
+                        updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
+                    } else {
+                        alertShow("Error!", "Las contraseñas no coinciden", "warning");
+                    }
                 }
             }
         });
@@ -261,14 +267,14 @@ document.addEventListener("DOMContentLoaded", function(){
                 .then(response => {
                     if (response.ok) {
                         method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
+                        printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
                         alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
-                    input = ""; // Reinicia los campos del formulario
+                    // input = ""; // Reinicia los campos del formulario
                 });
 
             // Cierra el modal de edición
