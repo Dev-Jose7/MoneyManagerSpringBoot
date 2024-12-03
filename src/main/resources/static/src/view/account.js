@@ -268,10 +268,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         }
 
                         // Reinicia los campos del formulario
-                        nameUpdate.value = "";
-                        emailUpdate.value = "";
-                        passwordUpdate.value = "";
-                        passwordConfirm.value = ""
+                        input = "";
                     });
             }
         
