@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.*;
+import jakarta.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -24,11 +24,10 @@ public class UserController {
     // Registrar un nuevo usuario
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
-        if(userService.findUserByEmail(user.getEmail()).isEmpty()){
+        if (userService.findUserByEmail(user.getEmail()).isEmpty()) {
             User createdUser = userService.registerUser(user);
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
@@ -60,18 +59,49 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Actualizar usuario
+    // Actualizar nombre del usuario
+    @PatchMapping("/{id}/name")
+    public ResponseEntity<User> updateUserName(@PathVariable Long id, @RequestBody String name) {
+        User user = userService.updateUserName(id, name);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Actualizar correo del usuario
+    @PatchMapping("/{id}/email")
+    public ResponseEntity<User> updateUserEmail(@PathVariable Long id, @RequestBody String email) {
+        if (userService.findUserByEmail(email).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        User user = userService.updateUserEmail(id, email);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Actualizar contraseña del usuario
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody String password) {
+        User user = userService.updateUserPassword(id, password);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Actualizar usuario completo
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
-        if(userService.findUserByEmail(updatedUser.getEmail()).isEmpty()){
+        if (userService.findUserByEmail(updatedUser.getEmail()).isEmpty()) {
             User user = userService.updateUser(id, updatedUser);
-
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 

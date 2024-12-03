@@ -80,7 +80,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    // Actualizar datos del usuario
+    // Actualizar todos los datos del usuario
     public User updateUser(Long id, User updatedUser) {
         Optional<User> existingUserOpt = userRepository.findById(id);
         if (existingUserOpt.isPresent()) {
@@ -89,6 +89,39 @@ public class UserService {
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setPassword(updatedUser.getPassword());
             return userRepository.save(existingUser);
+        }
+        return null;
+    }
+
+    // Actualiza solo el nombre del usuario
+    public User updateUserName(Long id, String name) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setName(name);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // Actualiza solo el correo del usuario
+    public User updateUserEmail(Long id, String email) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setEmail(email);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // Actualiza solo la contraseña
+    public User updateUserPassword(Long id, String password) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(password);
+            return userRepository.save(user);
         }
         return null;
     }

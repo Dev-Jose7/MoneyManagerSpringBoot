@@ -1,11 +1,11 @@
 import { alertShow } from "../../assets/js/util.js";
 
-export function sendData(action, url, instance) {
+export function sendData(action, url, body) {
     return new Promise((resolve, reject) => {
         fetch(`https://adequate-art-production-2380.up.railway.app/api/${url}`, {
             method: action,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(instance),
+            body: JSON.stringify(body),
         })
         .then(response => resolve(response))
         .catch(error => reject(error))
