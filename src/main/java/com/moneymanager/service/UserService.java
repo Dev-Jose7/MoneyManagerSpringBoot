@@ -80,19 +80,6 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    // Actualizar todos los datos del usuario
-    public User updateUser(Long id, User updatedUser) {
-        Optional<User> existingUserOpt = userRepository.findById(id);
-        if (existingUserOpt.isPresent()) {
-            User existingUser = existingUserOpt.get();
-            existingUser.setName(updatedUser.getName());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            return userRepository.save(existingUser);
-        }
-        return null;
-    }
-
     // Actualiza solo el nombre del usuario
     public User updateUserName(Long id, String name) {
         Optional<User> userOptional = userRepository.findById(id);
@@ -122,6 +109,19 @@ public class UserService {
             User user = userOptional.get();
             user.setPassword(password);
             return userRepository.save(user);
+        }
+        return null;
+    }
+
+    // Actualizar todos los datos del usuario
+    public User updateUser(Long id, User updatedUser) {
+        Optional<User> existingUserOpt = userRepository.findById(id);
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setPassword(updatedUser.getPassword());
+            return userRepository.save(existingUser);
         }
         return null;
     }
