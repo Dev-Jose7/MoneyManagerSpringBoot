@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
             if(nameUpdate.value != ""){
                 if(nameUpdate.value != user.getName()){
-                    updateDataUser("name", nameUpdate.value, user.setName, "Su nombre ha sido actualizado");
+                    updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
                 } else {
                     alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                 }
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Valida si se ingreso un correo
             if(emailUpdate.value != ""){
                 if(emailUpdate.value != user.getEmail()){
-                    updateDataUser("email", emailUpdate.value, user.setEmail, "Su correo ha sido actualizado");
+                    updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
                 } else {
                     alertShow("Error!", "El correo debe ser diferente al actual", "warning");
                 }
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
             if(passwordUpdate.value != "" && passwordConfirm.value != ""){
                 if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
-                    updateDataUser("password", passwordUpdate.value, user.setPassword, "Su contraseña ha sido actualizada");
+                    updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
                 } else {
                     alertShow("Error!", "Las contraseñas no coinciden", "warning");
                 }
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     .then(response => {
                         if (response.ok) {
                             // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
-                            method(input);
+                            method.forEach(func => func());
                             // Muestra un mensaje de éxito
                             alertShow("Hecho!", message, "success");
                         } else if (response.status == 406) {
