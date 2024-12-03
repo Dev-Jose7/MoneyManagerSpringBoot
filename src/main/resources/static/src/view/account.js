@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         function updateDataUser(url, input, method, message) {
             // Verifica que los campos de nombre, correo y contraseña no estén vacíos
-            if (nameUpdate.value != "" && emailUpdate.value != "" && passwordUpdate.value) {
+            if (nameUpdate.value != "" && emailUpdate.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
         
                 // Realiza una solicitud PUT para actualizar los datos del usuario
                 getData(sendData("PUT", `users/${user.getId()}`, {
@@ -271,6 +271,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         nameUpdate.value = "";
                         emailUpdate.value = "";
                         passwordUpdate.value = "";
+                        passwordConfirm.value = ""
                     });
             }
         
