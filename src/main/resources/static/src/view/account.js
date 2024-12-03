@@ -103,27 +103,56 @@ document.addEventListener("DOMContentLoaded", function(){
         document.getElementById("updateUser").addEventListener("click", function(e){
             e.preventDefault(); // Evita que el formulario se envíe.
 
-            // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
-            if(nameUpdate.value != ""){
-                if(nameUpdate.value != user.getName()){
+            let confirmPut = false;
+
+            // Verifica que los campos de nombre, correo y contraseña no estén vacíos para usar el controlador especifico (PUT)
+            nameUpdate.value != "" && emailUpdate.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value) ? confirmPut = true : confirmPut = false
+
+            // Si el usuario quiere cambiar todos sus datos al tiempo
+            if(confirmPut){
+                // Realiza una solicitud PUT para actualizar los datos del usuario
+                getData(sendData("PUT", `users/${user.getId()}`, {
+                    name: nameUpdate.value,
+                    email: emailUpdate.value,
+                    password: passwordUpdate.value
+                })).then(response => {
+                    // Valida la respuesta para asegurarse de que el correo no esté ya registrado
+                    if (response.ok) {
+                        // Si la actualización fue exitosa, se actualizan los datos del usuario localmente
+                        user.setName(nameUpdate.value);
+                        user.setEmail(emailUpdate.value);
+                        user.setPassword(passwordUpdate.value);
+                        // Muestra un mensaje de éxito
+                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
+                        // Imprime los nuevos datos del usuario en el dashboard
+                        printDataUser(); 
+                    } else if (response.status == 406) {
+                        // Si el correo ya está registrado, muestra un mensaje de error
+                        alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
+                    }
+
+                    // Reinicia los campos del formulario
+                    nameUpdate.value = "";
+                    emailUpdate.value = "";
+                    passwordUpdate.value = "";
+                });
+            } else { // Si el usuario quiere cambiar solo un dato especifíco
+                // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
+                if(nameUpdate.value != "" && nameUpdate.value != user.getName()){
                     updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
                 } else {
                     alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                 }
-            }
 
-            // Valida si se ingreso un correo
-            if(emailUpdate.value != ""){
-                if(emailUpdate.value != user.getEmail()){
+                // Valida si se ingreso un correo
+                if(emailUpdate.value != "" && emailUpdate.value != user.getEmail()){
                     updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
                 } else {
                     alertShow("Error!", "El correo debe ser diferente al actual", "warning");
                 }
-            }
-
-            // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
-            if(passwordUpdate.value != "" && passwordConfirm.value != ""){
-                if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
+                
+                // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
+                if(passwordUpdate.value != "" && passwordConfirm.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
                     updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
                 } else {
                     alertShow("Error!", "Las contraseñas no coinciden", "warning");
@@ -219,62 +248,29 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         function updateDataUser(url, input, method, message) {
-            // Verifica que los campos de nombre, correo y contraseña no estén vacíos
-            if (nameUpdate.value != "" && emailUpdate.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
-        
-                // Realiza una solicitud PUT para actualizar los datos del usuario
-                getData(sendData("PUT", `users/${user.getId()}`, {
-                    name: nameUpdate.value,
-                    email: emailUpdate.value,
-                    password: passwordUpdate.value
-                })).then(response => {
-                    // Valida la respuesta para asegurarse de que el correo no esté ya registrado
+            // Si los campos no están completos, revisamos cuántos de ellos tienen datos
+            [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(input => {
+                let counter = 0;
+                input != "" ? counter++ : counter;
+                // Si 2 campos están llenos, se define el mensaje de éxito por defecto
+                counter == 2 ? message = "Sus datos han sido actualizados" : message;
+            });
+    
+            // Realiza una solicitud PATCH para actualizar parcialmente los datos del usuario
+            getData(sendData("PATCH", `users/${user.getId()}/${url}`, input))
+                .then(response => {
                     if (response.ok) {
-                        // Si la actualización fue exitosa, se actualizan los datos del usuario localmente
-                        user.setName(nameUpdate.value);
-                        user.setEmail(emailUpdate.value);
-                        user.setPassword(passwordUpdate.value);
-        
-                        // Muestra un mensaje de éxito
-                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
+                        method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
+                        alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    // Imprime los nuevos datos del usuario en el dashboard
-                    printDataUser(); 
-                    // Reinicia los campos del formulario
-                    nameUpdate.value = "";
-                    emailUpdate.value = "";
-                    passwordUpdate.value = "";
+                    printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
+                    input = ""; // Reinicia los campos del formulario
                 });
-        
-            } else {
-                // Si los campos no están completos, revisamos cuántos de ellos tienen datos
-                [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(input => {
-                    let counter = 0;
-                    input != "" ? counter++ : counter;
-                    // Si 2 campos están llenos, se define el mensaje de éxito por defecto
-                    counter == 2 ? message = "Sus datos han sido actualizados" : message;
-                });
-        
-                // Realiza una solicitud PATCH para actualizar parcialmente los datos del usuario
-                getData(sendData("PATCH", `users/${user.getId()}/${url}`, input))
-                    .then(response => {
-                        if (response.ok) {
-                            method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
-                            alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
-                        } else if (response.status == 406) {
-                            // Si el correo ya está registrado, muestra un mensaje de error
-                            alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
-                        }
 
-                        printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
-                        input = ""; // Reinicia los campos del formulario
-                    });
-            }
-        
             // Cierra el modal de edición
             document.getElementById("editModal").style.display = "none";
         }        
