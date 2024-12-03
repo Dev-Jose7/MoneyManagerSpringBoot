@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
             if(nameUpdate.value != ""){
                 if(nameUpdate.value != user.getName()){
-                    updateDataUser("name", nameUpdate.value, user.setName, "Su nombre ha sido actualizado");
+                    updateDataUser("name", { name: nameUpdate.value }, user.setName, "Su nombre ha sido actualizado");
                 } else {
                     alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                 }
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Valida si se ingreso un correo
             if(emailUpdate.value != ""){
                 if(emailUpdate.value != user.getEmail()){
-                    updateDataUser("email", emailUpdate.value, user.setEmail, "Su correo ha sido actualizado");
+                    updateDataUser("email", { email: emailUpdate.value }, user.setEmail, "Su correo ha sido actualizado");
                 } else {
                     alertShow("Error!", "El correo debe ser diferente al actual", "warning");
                 }
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function(){
             // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
             if(passwordUpdate.value != "" && passwordConfirm.value != ""){
                 if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
-                    updateDataUser("password", passwordUpdate.value, user.setPassword, "Su contraseña ha sido actualizada");
+                    updateDataUser("password", { password: passwordUpdate.value }, user.setPassword, "Su contraseña ha sido actualizada");
                 } else {
                     alertShow("Error!", "Las contraseñas no coinciden", "warning");
                 }
