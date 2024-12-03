@@ -26,7 +26,6 @@ export function receiveData(action, url){
 export async function getData(callback) {
     try {
         return await callback;
-        statusData = true
     } catch (error) {
         alertShow("Error", "Inconveniente al obtener los datos, se actualizará en breve", "error");
         setTimeout(() =>{

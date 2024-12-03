@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 });
         
                 // Realiza una solicitud PATCH para actualizar parcialmente los datos del usuario
-                getData(sendData("PATCH", `${user.getId()}/${url}`, input))
+                getData(sendData("PATCH", `users/${user.getId()}/${url}`, input))
                     .then(response => {
                         if (response.ok) {
                             // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
