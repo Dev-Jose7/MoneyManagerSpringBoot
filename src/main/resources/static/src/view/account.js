@@ -258,22 +258,21 @@ document.addEventListener("DOMContentLoaded", function(){
                         if (response.ok) {
                             // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
                             method.forEach(func => func());
+                            // Imprime los nuevos datos del usuario en el dashboard
+                            printDataUser();
                             // Muestra un mensaje de éxito
                             alertShow("Hecho!", message, "success");
                         } else if (response.status == 406) {
                             // Si el correo ya está registrado, muestra un mensaje de error
                             alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                         }
+
+                        // Reinicia los campos del formulario
+                        nameUpdate.value = "";
+                        emailUpdate.value = "";
+                        passwordUpdate.value = "";
                     });
             }
-        
-            // Imprime los nuevos datos del usuario en el dashboard
-            printDataUser();
-        
-            // Reinicia los campos del formulario
-            nameUpdate.value = "";
-            emailUpdate.value = "";
-            passwordUpdate.value = "";
         
             // Cierra el modal de edición
             document.getElementById("editModal").style.display = "none";
