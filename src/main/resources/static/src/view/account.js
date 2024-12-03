@@ -241,6 +241,13 @@ document.addEventListener("DOMContentLoaded", function(){
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
+
+                    // Imprime los nuevos datos del usuario en el dashboard
+                    printDataUser(); 
+                    // Reinicia los campos del formulario
+                    nameUpdate.value = "";
+                    emailUpdate.value = "";
+                    passwordUpdate.value = "";
                 });
         
             } else {
@@ -256,19 +263,15 @@ document.addEventListener("DOMContentLoaded", function(){
                 getData(sendData("PATCH", `users/${user.getId()}/${url}`, input))
                     .then(response => {
                         if (response.ok) {
-                            // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
-                            method.forEach(func => func());
-                            // Imprime los nuevos datos del usuario en el dashboard
-                            printDataUser();
-                            // Muestra un mensaje de éxito
-                            alertShow("Hecho!", message, "success");
+                            method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
+                            alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                         } else if (response.status == 406) {
                             // Si el correo ya está registrado, muestra un mensaje de error
                             alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                         }
 
-                        // Reinicia los campos del formulario
-                        input = "";
+                        printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
+                        input = ""; // Reinicia los campos del formulario
                     });
             }
         
