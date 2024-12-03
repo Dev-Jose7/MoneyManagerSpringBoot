@@ -62,6 +62,7 @@ public class UserController {
     // Actualizar nombre del usuario
     @PatchMapping("/{id}/name")
     public ResponseEntity<User> updateUserName(@PathVariable Long id, @RequestBody String name) {
+        name = name.replaceAll("\"", "");
         User user = userService.updateUserName(id, name);
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -72,6 +73,7 @@ public class UserController {
     // Actualizar correo del usuario
     @PatchMapping("/{id}/email")
     public ResponseEntity<User> updateUserEmail(@PathVariable Long id, @RequestBody String email) {
+        email = email.replaceAll("\"", "");
         if (userService.findUserByEmail(email).isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -85,6 +87,7 @@ public class UserController {
     // Actualizar contraseña del usuario
     @PatchMapping("/{id}/password")
     public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody String password) {
+        password = password.replaceAll("\"", "");
         User user = userService.updateUserPassword(id, password);
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
