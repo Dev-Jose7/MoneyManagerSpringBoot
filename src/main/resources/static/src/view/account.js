@@ -122,10 +122,10 @@ document.addEventListener("DOMContentLoaded", function(){
                         user.setName(nameUpdate.value);
                         user.setEmail(emailUpdate.value);
                         user.setPassword(passwordUpdate.value);
-                        // Muestra un mensaje de éxito
-                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
                         // Imprime los nuevos datos del usuario en el dashboard
                         printDataUser(); 
+                        // Muestra un mensaje de éxito
+                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     nameUpdate.value = "";
                     emailUpdate.value = "";
                     passwordUpdate.value = "";
+                    passwordConfirm.value = "";
                 });
             } else { // Si el usuario quiere cambiar solo un dato especifíco
                 // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
@@ -274,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function(){
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    // input = ""; // Reinicia los campos del formulario
+                    input = ""; // Reinicia los campos del formulario
                 });
 
             // Cierra el modal de edición
