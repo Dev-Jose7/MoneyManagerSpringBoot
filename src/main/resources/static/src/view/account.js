@@ -272,8 +272,6 @@ document.addEventListener("DOMContentLoaded", function(){
                     if (response.ok) {
                         method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
                         printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
-                        // Reinicia los campos del formulario
-                        input = "";
                         alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
@@ -285,6 +283,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
             // Cierra el modal de edición
             document.getElementById("editModal").style.display = "none";
+            if(document.getElementById("editModal").style.display == "" || document.getElementById("editModal").style.display == "none"){
+                // Reinicia los campos del formulario
+                nameUpdate.value = "";
+                emailUpdate.value = "";
+                passwordUpdate.value = "";
+                passwordConfirm.value = "";
+            }
         }        
     }
 });
