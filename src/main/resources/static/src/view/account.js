@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 if(nameUpdate.value != ""){
                     if(nameUpdate.value != user.getName()){
                         let data = nameUpdate.value;
-                        updateDataUser("name", nameUpdate.value, [() => user.setName(data)], "Su nombre ha sido actualizado");
+                        updateDataUser("name", data, [() => user.setName(data)], "Su nombre ha sido actualizado");
                     } else {
                         alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                     }
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 if(emailUpdate.value != ""){
                     if(emailUpdate.value != user.getEmail()){
                         let data = emailUpdate.value;
-                        updateDataUser("email", emailUpdate.value, [() => user.setEmail(data)], "Su correo ha sido actualizado");
+                        updateDataUser("email", data, [() => user.setEmail(data)], "Su correo ha sido actualizado");
                     } else {
                         alertShow("Error!", "El correo debe ser diferente al actual", "warning");
                     }
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 if(passwordUpdate.value != ""){
                     if(confirmPassword(passwordUpdate.value, passwordConfirm.value)){ // Función que valida si las contraseñas coinciden.
                         let data = passwordUpdate.value;
-                        updateDataUser("password", passwordUpdate.value, [() => user.setPassword(data)], "Su contraseña ha sido actualizada");
+                        updateDataUser("password", data, [() => user.setPassword(data)], "Su contraseña ha sido actualizada");
                     } else {
                         alertShow("Error!", "Las contraseñas no coinciden", "warning");
                     }
@@ -255,9 +255,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
         function updateDataUser(url, input, method, message) {
             // Si los campos no están completos, revisamos cuántos de ellos tienen datos
-            [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(input => {
+            [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(values => {
                 let counter = 0;
-                input != "" ? counter++ : counter = counter;
+                values != "" ? counter++ : counter = counter;
                 // Si 2 campos están llenos, se define el mensaje de éxito por defecto
                 counter >= 2 ? message = "Sus datos han sido actualizados" : message = message;
             });
