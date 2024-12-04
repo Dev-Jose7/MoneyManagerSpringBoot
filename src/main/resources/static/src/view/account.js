@@ -257,9 +257,9 @@ document.addEventListener("DOMContentLoaded", function(){
             // Si los campos no están completos, revisamos cuántos de ellos tienen datos
             [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(input => {
                 let counter = 0;
-                input != "" ? counter++ : counter;
+                input != "" ? counter++ : counter = counter;
                 // Si 2 campos están llenos, se define el mensaje de éxito por defecto
-                counter == 2 ? message = "Sus datos han sido actualizados" : message;
+                counter >= 2 ? message = "Sus datos han sido actualizados" : message = message;
             });
     
             // Realiza una solicitud PATCH para actualizar parcialmente los datos del usuario
@@ -280,9 +280,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
         function clearModal(){
             document.getElementById("editModal").style.display = "none";
-            nameUpdate.value = ""
-            emailUpdate.value = ""
-            passwordUpdate.value = ""
+            nameUpdate.value = "";
+            emailUpdate.value = "";
+            passwordUpdate.value = "";
+            passwordConfirm.value = "";
         }
     }
 });
