@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 if(nameUpdate.value != ""){
                     if(nameUpdate.value != user.getName()){
                         let data = nameUpdate.value;
-                        updateDataUser("name", data, [() => user.setName(data)], "Su nombre ha sido actualizado");
+                        updateDataUser("name", nameUpdate.value, [() => user.setName(data)], "Su nombre ha sido actualizado");
                     } else {
                         alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                     }
