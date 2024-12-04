@@ -24,8 +24,11 @@ export function completeInput(array){
 
 // Función para confirmar si dos contraseñas coinciden
 export function confirmPassword(password, passwordConfirm){
-    // Compara las contraseñas y devuelve true si son iguales, de lo contrario false
-    return password == passwordConfirm;
+    // Compara las contraseñas siempre y cuando no estén vacías y devuelve true si son iguales, de lo contrario false
+    if(password != "" && passwordConfirm != ""){
+        return password == passwordConfirm;
+    }
+    return false;
 }
 
 // Función para iniciar sesión y almacenar la información del usuario en sessionStorage
