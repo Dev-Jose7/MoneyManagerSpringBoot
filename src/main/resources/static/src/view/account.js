@@ -264,25 +264,22 @@ document.addEventListener("DOMContentLoaded", function(){
                     if (response.ok) {
                         method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
                         printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
-                        clearModal(); // Cierra y limpia el modal
                         alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
+                    }
+
+                    document.getElementById("editModal").style.display = "none";
+                    if(document.getElementById("editModal").style.display == "" && document.getElementById("editModal").style.display == "none"){
+                        input = "";
                     }
                 });
         }
         
         // Cierra el modal de edición y limpia el formulario
         function clearModal(){
-            document.getElementById("editModal").style.display = "none";
-            if(document.getElementById("editModal").style.display == "" || document.getElementById("editModal").style.display == "none"){
-                // Reinicia los campos del formulario
-                nameUpdate.value = "";
-                emailUpdate.value = "";
-                passwordUpdate.value = "";
-                passwordConfirm.value = "";
-            }
+            
         }
     }
 });
