@@ -116,26 +116,19 @@ document.addEventListener("DOMContentLoaded", function(){
                     email: emailUpdate.value,
                     password: passwordUpdate.value
                 })).then(response => {
-                    // Valida la respuesta para asegurarse de que el correo no esté ya registrado
-                    if (response.ok) {
+                    if (response.ok) { // Valida la respuesta para asegurarse de que el correo no esté ya registrado
                         // Si la actualización fue exitosa, se actualizan los datos del usuario localmente
                         user.setName(nameUpdate.value);
                         user.setEmail(emailUpdate.value);
                         user.setPassword(passwordUpdate.value);
-                        // Imprime los nuevos datos del usuario en el dashboard
-                        printDataUser(); 
-                        // Muestra un mensaje de éxito
-                        alertShow("Hecho!", "Sus datos han sido actualizados", "success");
+                        printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
+                        alertShow("Hecho!", "Sus datos han sido actualizados", "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    // Reinicia los campos del formulario
-                    nameUpdate.value = "";
-                    emailUpdate.value = "";
-                    passwordUpdate.value = "";
-                    passwordConfirm.value = "";
+                    clearModal(); // Cierra el modal y limpia el formulario
                 });
             } else { // Si el usuario quiere cambiar solo un dato especifíco
                 // Si se ingresó un nuevo nombre, actualiza el nombre del usuario.
@@ -278,10 +271,12 @@ document.addEventListener("DOMContentLoaded", function(){
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    
+                    clearModal(); // Cierra y limpia el modal
                 });
-
-            // Cierra el modal de edición
+        }
+        
+        // Cierra el modal de edición y limpia el formulario
+        function clearModal(){
             document.getElementById("editModal").style.display = "none";
             if(document.getElementById("editModal").style.display == "" || document.getElementById("editModal").style.display == "none"){
                 // Reinicia los campos del formulario
@@ -290,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 passwordUpdate.value = "";
                 passwordConfirm.value = "";
             }
-        }        
+        }
     }
 });
 
