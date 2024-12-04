@@ -272,14 +272,15 @@ document.addEventListener("DOMContentLoaded", function(){
                     if (response.ok) {
                         method.forEach(func => func()); // Si la actualización fue exitosa, ejecuta el método del usuario correspondiente para actualizar sus datos también en frontend
                         printDataUser(); // Imprime los nuevos datos del usuario en el dashboard
+                        // Reinicia los campos del formulario
+                        input = "";
                         alertShow("Hecho!", message, "success"); // Muestra un mensaje de éxito
                     } else if (response.status == 406) {
                         // Si el correo ya está registrado, muestra un mensaje de error
                         alertShow("Error!", "Este correo ya se encuentra registrado, utilice uno válido.", "error");
                     }
 
-                    // Reinicia los campos del formulario
-                    input.value = "";
+                    
                 });
 
             // Cierra el modal de edición
