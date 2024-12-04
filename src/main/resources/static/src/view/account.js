@@ -134,10 +134,11 @@ document.addEventListener("DOMContentLoaded", function(){
                 if(nameUpdate.value != ""){
                     if(nameUpdate.value != user.getName()){
                         let data = nameUpdate.value;
-                        updateDataUser("name", nameUpdate.value, [() => user.setName(data)], "Su nombre ha sido actualizado");
+                        updateDataUser("name", data, [() => user.setName(data)], "Su nombre ha sido actualizado");
                     } else {
                         alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
                     }
+                    nameUpdate.value = ""
                 }
 
                 // Valida si se ingreso un correo
@@ -148,6 +149,7 @@ document.addEventListener("DOMContentLoaded", function(){
                     } else {
                         alertShow("Error!", "El correo debe ser diferente al actual", "warning");
                     }
+                    emailUpdate.value = ""
                 }
                 
                 // Si se ingresó una nueva contraseña y su confirmación, valida que coincidan y actualiza la contraseña.
@@ -158,6 +160,8 @@ document.addEventListener("DOMContentLoaded", function(){
                     } else {
                         alertShow("Error!", "Las contraseñas no coinciden", "warning");
                     }
+                    passwordUpdate.value = "";
+                    passwordConfirm.value = "";
                 }
             }
         });
@@ -271,15 +275,14 @@ document.addEventListener("DOMContentLoaded", function(){
                     }
 
                     document.getElementById("editModal").style.display = "none";
-                    if(document.getElementById("editModal").style.display == "" && document.getElementById("editModal").style.display == "none"){
-                        input = "";
-                    }
                 });
         }
-        
-        // Cierra el modal de edición y limpia el formulario
+
         function clearModal(){
-            
+            document.getElementById("editModal").style.display = "none";
+            nameUpdate.value = ""
+            emailUpdate.value = ""
+            passwordUpdate.value = ""
         }
     }
 });
