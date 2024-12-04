@@ -160,13 +160,13 @@ document.addEventListener("DOMContentLoaded", function(){
                     alertShow("Error!", "Las contraseñas no coinciden", "warning");
                 }
 
-                // Limpiar los campos solo después de que todos los campos hayan sido procesados
-                if (updatedFields > 0) {
-                    nameUpdate.value = "";
-                    emailUpdate.value = "";
-                    passwordUpdate.value = "";
-                    passwordConfirm.value = "";
-                }
+                // // Limpiar los campos solo después de que todos los campos hayan sido procesados
+                // if (updatedFields > 0) {
+                //     nameUpdate.value = "";
+                //     emailUpdate.value = "";
+                //     passwordUpdate.value = "";
+                //     passwordConfirm.value = "";
+                // }
             }
         });
 
