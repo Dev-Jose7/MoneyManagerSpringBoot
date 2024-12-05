@@ -83,13 +83,20 @@
             <div id="editModal" class="modal">
                 <div class="modal-content">
                     <h3>Actualizar datos</h3>
+                    <div class="modal-title">
+                        <button id="buttonName" class="selection-title">Nombre</button>
+                        <button id="buttonEmail">Correo</button>
+                        <button id="buttonPassword">Contraseña</button>
+                    </div>
                     <form>
-                        <div class="info-row">
-                            <div class="info-group">
-                                <label for="type">Nombre</label>
-                                <input id="nameUpdate">
+                        <div class="info-row"></div>
+                        <!-- <div class="info-group">
+                            <div class="info-group-input">
+                                <input id="">
+                                <button class="btn-add">Guardar</button>
                             </div>
-                            <div class="info-group">
+                        </div> -->
+                            <!-- <div class="info-group">
                                 <label for="value">Correo</label>
                                 <input id="emailUpdate">
                             </div>
@@ -101,10 +108,8 @@
                             <div class="info-group">
                                 <label for="value"> Repetir contraseña</label>
                                 <input id="passwordConfirm" type="password">
-                            </div>
-                        </div>
+                            </div> -->
                         <div class="form-actions">
-                            <button class="btn-add" id="updateUser">Confirmar</button>
                             <button type="reset" class="btn-cancel cancelar">Cancelar</button>
                         </div>
                     </form>

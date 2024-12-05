@@ -263,6 +263,11 @@ thead{
     width: 100%;
 }
 
+.info-group-input{
+    display: flex;
+    gap: 2vw;
+}
+
 .form-group label,
 .info-group label{
     display: block;
@@ -310,6 +315,10 @@ select{
     margin-top: 20px;
 }
 
+#editModal .form-actions{
+    justify-content: center;
+}
+
 .btn-add,
 .btn-cancel {
     background-color: #4CAF50;
@@ -327,6 +336,10 @@ select{
 
 .btn-cancel {
     background-color: #f44336;
+}
+
+.form-actions .btn-cancel{
+    text-align: end;
 }
 
 .form-actions .btn-cancel:hover {
@@ -642,6 +655,24 @@ select{
 .modal-statistics{
     display: flex;
     justify-content: space-between;
+}
+
+.modal-title{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2vw;
+}
+
+.modal-title button{
+    flex: 1;
+    font-weight: 600;
+    padding: 10px 0;
+    border-style: none;
+}
+
+.selection-title{
+    color: #f9f9f9;
+    background-color: #333;
 }
 
 /* Estilo para cerrar la modal */

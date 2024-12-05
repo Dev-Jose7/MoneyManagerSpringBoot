@@ -21,9 +21,9 @@ document.addEventListener("DOMContentLoaded", function(){
         let password = document.getElementById("password"); // Elemento para mostrar la contraseña del usuario.
 
         // Variables para los campos de entrada donde el usuario puede actualizar sus datos.
-        let nameUpdate = document.getElementById("nameUpdate");
-        let emailUpdate = document.getElementById("emailUpdate");
-        let passwordUpdate = document.getElementById("passwordUpdate");
+        let buttonName = document.getElementById("buttonName");
+        let buttonEmail = document.getElementById("buttonEmail");
+        let buttonPassword = document.getElementById("buttonPassword");
         let passwordConfirm = document.getElementById("passwordConfirm");
         let tagInput = document.getElementById("tagInput");
         let updateTagInput = document.getElementById("updateTagInput");
@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
         // Evento para mostrar el modal de actualización de datos del usuario.
         document.getElementById("updateData").addEventListener("click", function(e) {
             document.getElementById("editModal").style.display = "flex"; // Muestra el modal de edición.
+            firstInput();
         });
 
         // Evento para mostrar el modal para añadir una nueva categoría.
@@ -101,27 +102,42 @@ document.addEventListener("DOMContentLoaded", function(){
 
         // Evento para actualizar los datos del usuario.
         // Función para manejar el evento de actualización del usuario
-        document.getElementById("updateUser").addEventListener("click", function(e) {
-            e.preventDefault(); // Evita que el formulario se envíe
+        // document.getElementById("updateUser").addEventListener("click", function(e) {
+        //     e.preventDefault(); // Evita que el formulario se envíe
             
-            // Si el usuario no quiere cambiar todos los datos, realiza la actualización solo de los campos que han cambiado
-            if (nameUpdate.value != "" && nameUpdate.value != user.getName()) {
-                updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
-            } else if (nameUpdate.value === user.getName()) {
-                alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
-            }
+        //     // Si el usuario no quiere cambiar todos los datos, realiza la actualización solo de los campos que han cambiado
+        //     if (nameUpdate.value != "" && nameUpdate.value != user.getName()) {
+        //         updateDataUser("name", nameUpdate.value, [() => user.setName(nameUpdate.value)], "Su nombre ha sido actualizado");
+        //     } else if (nameUpdate.value === user.getName()) {
+        //         alertShow("Error!", "El nombre debe ser diferente al actual", "warning");
+        //     }
 
-            if (emailUpdate.value != "" && emailUpdate.value != user.getEmail()) {
-                updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
-            } else if (emailUpdate.value === user.getEmail()) {
-                alertShow("Error!", "El correo debe ser diferente al actual", "warning");
-            }
+        //     if (emailUpdate.value != "" && emailUpdate.value != user.getEmail()) {
+        //         updateDataUser("email", emailUpdate.value, [() => user.setEmail(emailUpdate.value)], "Su correo ha sido actualizado");
+        //     } else if (emailUpdate.value === user.getEmail()) {
+        //         alertShow("Error!", "El correo debe ser diferente al actual", "warning");
+        //     }
 
-            if (passwordUpdate.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
-                updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
-            } else if (passwordUpdate.value != "" && !confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
-                alertShow("Error!", "Las contraseñas no coinciden", "warning");
-            }
+        //     if (passwordUpdate.value != "" && confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
+        //         updateDataUser("password", passwordUpdate.value, [() => user.setPassword(passwordUpdate.value)], "Su contraseña ha sido actualizada");
+        //     } else if (passwordUpdate.value != "" && !confirmPassword(passwordUpdate.value, passwordConfirm.value)) {
+        //         alertShow("Error!", "Las contraseñas no coinciden", "warning");
+        //     }
+        // });
+
+        buttonName.addEventListener("click", function(){
+            firstInput();
+        });
+
+        buttonEmail.addEventListener("click", function(){
+            updateModalTitle(buttonEmail);
+            inputUpdate("inputEmail", "updateEmail", "email", user.getEmail, user.setEmail, "Su correo ha sido actualizado", "El correo debe ser diferente al actual");
+            
+        });
+
+        buttonPassword.addEventListener("click", function(){
+            updateModalTitle(buttonPassword);
+            inputUpdate("inputPassword", "updatePassword", "password", user.getPassword, user.setPassword, "Su contraseña ha sido actualizada", "La contraseña debe ser diferente a la actual");
         });
 
         // Evento para añadir una nueva categoría.
@@ -200,8 +216,8 @@ document.addEventListener("DOMContentLoaded", function(){
             email.textContent = user.getEmail();
 
             // Configura los valores por defecto de los campos de actualización con los datos del usuario.
-            nameUpdate.placeholder = user.getName();
-            emailUpdate.placeholder = user.getEmail();
+            // nameUpdate.placeholder = user.getName();
+            // emailUpdate.placeholder = user.getEmail();
         }
 
         // Función para obtener la contraseña del usuario
@@ -211,19 +227,61 @@ document.addEventListener("DOMContentLoaded", function(){
                 .then(data => user.setPassword(data.password))
         }
 
+        function inputUpdate(input, button, endpoint, getData, setData, success, error){
+            const container = document.getElementById("editModal").querySelector(".info-row");
+            container.innerHTML = "";
+
+            let elemento = 
+            `<div class="info-group">
+                <div class="info-group-input">
+                    ${input != "inputPassword" ? `<input id="${input}">` : `<input id="${input}" type="password"> <input id="passwordConfirm" type="password">`}
+                    <button id="${button}" class="btn-add">Guardar</button>
+                </div>
+            </div>`
+
+            container.innerHTML = elemento;
+
+            const update = document.getElementById(button);
+            const data = document.getElementById(input);
+
+            if(input != "inputPassword"){
+                data.placeholder = getData.call(user);
+            }
+
+            update.addEventListener("click", function(e){
+                e.preventDefault();
+
+                if (data.value != "" && data.value != getData.call(user)) {
+                    if(input == "inputPassword"){
+                        if(confirmPassword(data.value, document.getElementById("passwordConfirm").value)){
+                            updateDataUser(endpoint, data.value, [() => setData.call(user, data.value)], success);
+                        } else alertShow("Error!", "Las contraseñas no coinciden", "warning");
+                    } 
+                    
+                    if (input != "inputPassword"){
+                        updateDataUser(endpoint, data.value, [() => setData.call(user, data.value)], success);
+                    }
+                } else if (data.value === getData.call(user)) {
+                    alertShow("Error!", error, "warning");
+                }
+            });
+        }
+
+        function updateModalTitle(button){
+            [...document.querySelector(".modal-title").children].forEach(title => {
+                title.classList.remove("selection-title");
+            });
+
+            button.classList.add("selection-title");
+        }
+
+        function firstInput(){
+            updateModalTitle(buttonName);
+            inputUpdate("inputName", "updateName", "name", user.getName, user.setName, "Su nombre ha sido actualizado", "El nombre debe ser diferente al actual");
+        }
+
         // Función para actualizar los datos del usuario
         function updateDataUser(url, input, method, message) {
-            // Si los campos no están completos, revisamos cuántos de ellos tienen datos
-            let counter = 0;
-            [nameUpdate.value, emailUpdate.value, passwordUpdate.value].forEach(value => {
-                if (value != "") counter++;
-            });
-        
-            // Si 2 campos están llenos, se define el mensaje de éxito por defecto
-            if (counter >= 2) {
-                message = "Sus datos han sido actualizados";
-            }
-        
             // Realiza una solicitud PATCH para actualizar parcialmente los datos del usuario
             getData(sendData("PATCH", `users/${user.getId()}/${url}`, input))
                 .then(response => {
@@ -244,10 +302,6 @@ document.addEventListener("DOMContentLoaded", function(){
                     alertShow("Error!", "Hubo un problema al actualizar los datos. Intente nuevamente.", "error");
                     console.error(err);
                 });
-        
-            console.log("Actualizando nombre:", nameUpdate.value);
-            console.log("Actualizando correo:", emailUpdate.value);
-            console.log("Actualizando contraseña:", passwordUpdate.value);
         }
 
         function clearModal(){
