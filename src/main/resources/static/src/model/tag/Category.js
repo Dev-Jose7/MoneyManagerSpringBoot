@@ -1,3 +1,5 @@
+import { receiveData } from "../../controller/api.js";
+
 // Clase que gestiona las categorías de transacciones.
 export default class Category {
     static contadorId = 0; //Sirve para asignar id a las instancias
@@ -9,26 +11,25 @@ export default class Category {
             this.id = id; //Crea id a la categoria de acuerdo al orden en el que se vayan creando
             this.tag = tag; // Asigna la etiqueta de la categoría.
             Category.categoriesData.push(this); // Agrega la categoría a la lista.
-            Category.saveDataSession(); // Guarda la categoría en sessionStorage.
         } else if(!id && tag){}
     }
 
-    // Método estático para guardar las categorías en sessionStorage.
-    static saveDataSession() {
-        sessionStorage.setItem("categories", JSON.stringify(Category.categoriesData));
-    }
-
-    // Método estático para cargar las categorías desde sessionStorage.
+    // Método estático para obtener las categorías al servidor.
     static loadDataSession() {
-        try {
-            let tag = JSON.parse(sessionStorage.getItem("categories")); // Parsea las categorías almacenadas.
-            for (let i = 0; i < tag.length; i++) {
-                new Category(tag[i].id, tag[i].tag); // Crea instancias de categorías.
-            }
-        } catch (error) {
-            // Manejo del error si las categorías no pueden ser cargadas
-            // Esto por si el arreglo (tag) esta vacío, ya que si esta vacio la propiedad length no es valida para el arreglo y arrojara error
-        }
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        return new Promise(resolve => {
+            receiveData("GET", `categories/user/${user[0].id}`)
+                .then(response => {
+                    if(response.ok){
+                        response.json().then(categories => {
+                            for (let i = 0; i < categories.length; i++) {
+                                new Category(categories[i].id, categories[i].tag); // Crea instancias de categorías.
+                            }
+                            resolve();
+                        })
+                    }
+                });
+        });
 
     }
 
@@ -120,8 +121,6 @@ export default class Category {
                 category.tag = tagNew; // Actualiza la etiqueta de la categoría.
             }
         });
-
-        Category.saveDataSession();
     }
 
     // Método para eliminar una categoría.
@@ -130,8 +129,6 @@ export default class Category {
             return category.tag == tag
         });
 
-        console.log(index);
         Category.categoriesData.splice(index, 1); // Elimina la categoría del arreglo.
-        Category.saveDataSession(); // Guarda los cambios en sessionStorage.
     }
 }

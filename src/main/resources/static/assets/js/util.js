@@ -1,4 +1,3 @@
-import { getData, receiveData } from "../../src/controller/api.js";
 import User from "../../src/model/account/User.js";
 
 // Función para verificar si todos los campos de un array tienen algún valor.
@@ -61,8 +60,7 @@ export function endSession(url){
 
 // Función para obtener el usuario de sessionStorage y buscar sus datos
 export function findUser (){
-    let account = JSON.parse(sessionStorage.getItem("user")); // Obtiene los datos del usuario almacenados en sessionStorage
-    return User.getUserData().find(user => user.id == account[0].id); // Busca al usuario correspondiente
+    return User.getUserData()[0]
 }
 
 // Función que verifica si la sesión está activa

@@ -1,7 +1,6 @@
 import User from "../model/account/User.js";
 import { closeloading, completeInput, initSession } from "../../assets/js/util.js";
-import Transaccion from "../model/operation/Transaccion.js";
-import { getData, sendData } from "../controller/api.js";
+import { sendData } from "../controller/api.js";
 
 document.addEventListener("DOMContentLoaded", function(){
     // Carga los datos de usuario y transacciones almacenados en la sesión.
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(){
         let status = completeInput(inputs);  // Verifica si todos los campos requeridos están completos.
 
         if(status){
-            getData(sendData("POST", "users/login", {email: inputEmail.value, password: inputPassword.value}))
+            sendData("POST", "users/login", {email: inputEmail.value, password: inputPassword.value})
                 .then(response => {
                     if(response.ok){
                         statusLogin.textContent = "Acceso autorizado";

@@ -1,3 +1,5 @@
+import { alertShow } from "../../../assets/js/util.js";
+import { receiveData } from "../../controller/api.js";
 import Transaccion from "../operation/Transaccion.js";
 import Category from "../tag/Category.js";
 
@@ -17,7 +19,6 @@ export default class User {
         this.transactions = new Transaccion(); // Crea una nueva instancia de transacciones.
         this.categories = new Category(null, this.id); // Crea una nueva instancia de categorías.
         User.userData.push(this); // Agrega el usuario a la lista de usuarios.
-        User.saveDataSession(); // Guarda la sesión del usuario.
     }
 
     // Métodos para obtener los atributos del usuario.
@@ -32,27 +33,28 @@ export default class User {
     static getUserData() { return User.userData; }
 
     // Métodos para establecer los atributos del usuario.
-    setId(id) { this.id = id; User.saveDataSession()}
-    setName(name) { this.name = name; User.saveDataSession()}
-    setEmail(email) { this.email = email; User.saveDataSession()}
-    setPassword(password) { this.password = password; User.saveDataSession()}
+    setId(id) { this.id = id; }
+    setName(name) { this.name = name; }
+    setEmail(email) { this.email = email; }
+    setPassword(password) { this.password = password; }
 
-    // Método estático para guardar los datos del usuario en sessionStorage.
-    static saveDataSession() {
-        sessionStorage.setItem("user", JSON.stringify(User.getUserData()));
-        //Guarda en sessionStorage la base de datos de los usuarios (userData) cuando haya modificaciones en esta (crear, modificar o eliminar un usuario). Esto con el fin de conservar los valores que se hayan almacenado en la base de datos para poder utilizarlos en una nueva página.
-    }
-
-    // Método estático para cargar los datos del usuario desde sessionStorage.
+    // Método estático para obtener los datos del usuario al servidor y cargarlos al sessionStorage.
     static loadDataSession() {
-        let data = JSON.parse(sessionStorage.getItem("user")); // Recupera los datos del sessionStorage.
-        for (let i = 0; i < data.length; i++) {
-            new User(data[i].id, data[i].name, data[i].email, "*"); // Crea instancias de usuario.
-        }
-        
-        //Carga en la base de datos (userData) el elemento almacenado en sessionStorage (gestionado por saveDataSession). Esto con el fin de entregar a la base de datos todos los valores que fueron añadidos a la base antes de recargar la pagina, esto permite a la base de datos mantenerse actualizada constantemente
-        //Función que reconstruye una instancia después de ser transformada nuevamente a su valor original (JSON.parse). Esto debido a que las instancias se encontraban almacenadas en formato JSON (JSON.stringify)
-        //JSON transforma la base de datos en una cadena de caracteres para que sessionStorage pueda almacenarla y al transformarla nuevamente a su valor original (arreglo), los objetos no conservarán sus métodos de clase ya que se pierde la instancia del objeto al momento de la conversion al intentar almacenar la base de datos en sessionStorage
+        return new Promise(resolve => {
+            let user = JSON.parse(sessionStorage.getItem("user"))
+            receiveData("GET", `users/${user[0].id}`)
+                .then(response => {
+                    if(response.ok){
+                        response.json().then(account => {
+                            // Guarda los datos a sessionStorage.
+                            sessionStorage.setItem("user", JSON.stringify([{ id: account.id, name: account.name, email: account.email}]))
+                            new User(account.id, account.name, account.email, "*"); // Crea instancias de usuario.
+                            resolve();
+                        })
+                    }
+                })
+                .catch(error => error)
+        })
     }
 
     // Método estático para validar las credenciales del usuario.

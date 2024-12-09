@@ -315,7 +315,7 @@ select{
     margin-top: 20px;
 }
 
-#editModal .form-actions{
+.modal-updateAccount .form-actions{
     justify-content: center;
 }
 

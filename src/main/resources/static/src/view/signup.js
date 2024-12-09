@@ -1,8 +1,6 @@
 import User from "../model/account/User.js"; // Importa la clase User desde el controlador de cuenta.
 import { alertShow, closeloading, completeInput, confirmPassword, initSession } from "../../assets/js/util.js"; // Importa funciones auxiliares desde un archivo util.js.
-import Transaccion from "../model/operation/Transaccion.js"; // Importa la clase Transaccion desde el controlador de operaciones.
-import { getData, receiveData, sendData } from "../controller/api.js";
-import Category from "../model/tag/Category.js";
+import { receiveData, sendData } from "../controller/api.js";
 
 const inputName = document.getElementById("name"); // Referencia al input de nombre en el formulario.
 const inputEmail = document.getElementById("email"); // Referencia al input de email en el formulario.
@@ -21,11 +19,11 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
 
     if (statusInput && statusPassword) { // Si ambos validadores retornan 'true', significa que todo está correcto.
         
-        getData(sendData("POST", "users/register", {
+        sendData("POST", "users/register", {
             name: inputName.value,
             email: inputEmail.value,
             password: inputPassword.value
-        })).then(response => {
+        }).then(response => {
             if(response.ok){
                 response.json().then(user => {
                     statusRegister.textContent = "Registro completado"; // Muestra un mensaje de éxito en el elemento 'statusRegister'.
@@ -36,20 +34,20 @@ document.querySelector("input[type = 'submit']").addEventListener("click", funct
                     // Inicia un bucle para realizar una única solicitud a la API, esto para obtener las categorias por defecto del usuario una vez creado.
                     for (let i = 0; i < statusGet; i++) {
                         // Realiza una solicitud GET para obtener las categorías del usuario desde el servidor
-                        getData(receiveData("GET", `categories/user/${user.id}`))
-                        .then(response => {
-                            if(response.ok){ // Si la respuesta de la solicitud es correcta (status ok)
-                                response.json().then(data => { // Convierte la respuesta JSON a un objeto JavaScript
-                                    if(data != null && data.length > 0){ // Verifica si los datos obtenidos son válidos (no nulos ni vacíos)
-                                        statusGet = 0;  // Cambia el estado de 'statusGet' a 0, lo que indica que la información fue recibida
-                                        user.categories = data;  // Asigna los datos de categorías a la variable 'categoriesUser'
-                                        initSession(user); // Inicia la sesión del usuario con la información obtenida
-                                    } else {
-                                        statusGet++; // Si los datos están vacíos o nulos, incrementa 'statusGet' para intentar de nuevo
-                                    }
-                                });
-                            }
-                        });
+                        receiveData("GET", `categories/user/${user.id}`)
+                            .then(response => {
+                                if(response.ok){ // Si la respuesta de la solicitud es correcta (status ok)
+                                    response.json().then(data => { // Convierte la respuesta JSON a un objeto JavaScript
+                                        if(data != null && data.length > 0){ // Verifica si los datos obtenidos son válidos (no nulos ni vacíos)
+                                            statusGet = 0;  // Cambia el estado de 'statusGet' a 0, lo que indica que la información fue recibida
+                                            user.categories = data;  // Asigna los datos de categorías a la variable 'categoriesUser'
+                                            initSession(user); // Inicia la sesión del usuario con la información obtenida
+                                        } else {
+                                            statusGet++; // Si los datos están vacíos o nulos, incrementa 'statusGet' para intentar de nuevo
+                                        }
+                                    });
+                                }
+                            });
                     }
                 })
             } else {

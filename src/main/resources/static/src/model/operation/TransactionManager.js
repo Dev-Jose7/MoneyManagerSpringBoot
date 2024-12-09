@@ -58,8 +58,6 @@ export default class TransactionManager {
             Transaccion.getTransactionsUser().splice(indice, 1); // Elimina la transacción del arreglo.
             console.log("Eliminada");
         }
-
-        Transaccion.saveDataSession(); // Guarda los cambios en la sesión.
     }
 
     // Método para actualizar una transacción existente.
@@ -79,7 +77,6 @@ export default class TransactionManager {
         console.log(tipo.value, +valor.value, descripcion.value, fecha.value, categoria.value)
         
         console.log(Transaccion.getTransactionsUser())
-        Transaccion.saveDataSession();
     }
 
     //Método que se utiliza para actualizar una categoria que fue modificada de la lista de categorias a todas las transacciones que la usan
@@ -89,7 +86,5 @@ export default class TransactionManager {
                 transaction.category.tag = newTag;
             }
         });
-
-        Transaccion.saveDataSession();
     }
 }

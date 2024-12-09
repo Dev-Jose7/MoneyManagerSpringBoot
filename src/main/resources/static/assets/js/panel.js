@@ -26,19 +26,20 @@ export let gastosByMonth = []; // Array para los gastos del mes
 
 // Llamadas iniciales para verificar la sesión y cargar datos persistentes
 checkSession(); // Revisa si hay un usuario en el sessionStorage para continuar
-User.loadDataSession(); // Carga datos de usuario si no existen ya en la sesión
-Transaccion.loadDataSession(); // Carga las transacciones previas
-Category.loadDataSession(); // Carga las categorías disponibles
+await User.loadDataSession(); // Carga datos de usuario
+await Transaccion.loadDataSession(); // Carga las transacciones previas
+await Category.loadDataSession(); // Carga las categorías disponibles
+// Estos métodos al tener asociado un await hace que la ejecución de todo el script se pause hasta que las promesas que retornan estos métodos sea resuelta por la operación asíncrona resolve()
+// Este tipo de await se conece como top-level await y permite obtener los recursos necesarios antes de iniciar con el resto de operaciones que necesitan de estos recursos 
 
-user = findUser(); // Encuentra al usuario actual a partir de la sesión
-// Función para mostrar el nombre del usuario en el encabezado
+user = findUser(); //Obtener el usuario del arreglo estatico de la clase User
 
 // Carga los datos de sesión (usuario, transacciones, etc.).
 console.log("Usuario", User.getUserData()[0]);
 console.log("DB Transacciones", Transaccion.getTransactionsUser());
 console.log("DB Categorias", Category.getCategoriesUser());
 
-
+// Función para mostrar el nombre del usuario en el encabezado
 export function printNameUser(){
     document.getElementById("nameUser").textContent = user.getName().split(" ")[0]; //Se generan subcadenas (palabras) al nombre del usuario por cada espacio en blanco (" ") que tenga esta cadena de caracteres y se obtiene la primer subcadena [0] la cuál será el primer nombre del usuario
 }

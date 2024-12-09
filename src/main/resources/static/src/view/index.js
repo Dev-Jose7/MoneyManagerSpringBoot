@@ -1,105 +1,105 @@
 import { closeloading, endSession, findUser } from "../../assets/js/util.js";
 import User from "../model/account/User.js";
 
-document.addEventListener("DOMContentLoaded", function(){
-    let user = {}; // Variable que almacenará el objeto de usuario.
-    let url = document.location.href; // Obtiene la URL actual de la página.
-    let page = url.substring(url.lastIndexOf('/') + 1); // Extrae el nombre de la página actual desde la URL.
 
-    if(sessionStorage.getItem("user")){
-        User.loadDataSession() //Carga el usuario al arreglo estatico de la clase User si existe un usuario en sessionStorage
-    }
 
-    // Lógica específica para la página index.html o la página principal ("/").
-    if(page == "index.html" || window.location.pathname == "/"){
-        menuSessionUser("./assets/html/dashboard.html"); // Verifica si hay un usuario logueado y ajusta el menú.
-        backgroundImage(); // Función que genera imágenes de fondo en el encabezado de la página principal.
+let user = {}; // Variable que almacenará el objeto de usuario.
+let url = document.location.href; // Obtiene la URL actual de la página.
+let page = url.substring(url.lastIndexOf('/') + 1); // Extrae el nombre de la página actual desde la URL.
 
-        // Función para cambiar el fondo del encabezado en intervalos.
-        function backgroundImage(){
-            let contador = 1; // Contador para ir cambiando las imágenes de fondo.
-            setInterval(() => {
-                contador++; // Incrementa el contador cada 6 segundos.
-    
-                const fondo = new Image(); // Crea una nueva imagen.
-                fondo.src = `./assets/img/banner${contador}.jpg`; // Precarga la imagen de fondo según el contador.
-    
-                // Cuando la imagen se carga, se cambia el fondo del encabezado.
-                fondo.addEventListener("load", function(){
-                    document.querySelector(".encabezado__banner").style.backgroundImage = `url('${fondo.src}')`;
-                });
-    
-                // Vuelve al primer banner después de la imagen 3.
-                if(contador == 4){
-                    contador = 0; // Resetea el contador para que vuelva a comenzar.
-                }
-                
-            }, 6000); // Cambia la imagen cada 6 segundos.
-        }
-                
-    }
+if(sessionStorage.getItem("user")){
+    await User.loadDataSession(); //Carga el usuario al arreglo estatico de la clase User si existe un usuario en sessionStorage
+}
 
-    // Lógica específica para la página "nosotros.html" o "nosotros".
-    if(page == "nosotros.html" || page == "nosotros"){
-        menuSessionUser("./dashboard.html", "./login.html"); // Muestra el menú con la opción de Dashboard o login dependiendo del estado de sesión.
-    }
+// Lógica específica para la página index.html o la página principal ("/").
+if(page == "index.html" || window.location.pathname == "/"){
+    menuSessionUser("./assets/html/dashboard.html"); // Verifica si hay un usuario logueado y ajusta el menú.
+    backgroundImage(); // Función que genera imágenes de fondo en el encabezado de la página principal.
 
-    // Función para manejar el estado del menú y la sesión del usuario.
-    function menuSessionUser(dashboard){
-        // Verifica si hay un usuario logueado en sessionStorage.
-        if(sessionStorage.getItem("user")){ 
-            user = findUser(); // Busca el usuario en el sessionStorage.
+    // Función para cambiar el fondo del encabezado en intervalos.
+    function backgroundImage(){
+        let contador = 1; // Contador para ir cambiando las imágenes de fondo.
+        setInterval(() => {
+            contador++; // Incrementa el contador cada 6 segundos.
 
-            // Si hay un usuario logueado, ocultar la sección de "usuario no logeado" y mostrar el nombre de usuario.
-            document.querySelector(".encabezado__usuario").style.display = "none"; // Oculta el área de usuario no logeado.
-            if(window.innerWidth > 768){
-                // Si el ancho de la ventana es mayor a 768px, oculta el botón del menú en el dispositivo de escritorio.
-                document.querySelector(".btn-menu").style.display = "none";
-            } 
-            // Modifica el menú de la barra superior para mostrar el nombre del usuario y el acceso al dashboard.
-            document.getElementById("barra").innerHTML += `
-                <div class="header-right">
-                    <button class="btn-icon" title="Dashboard" id="dashboard">
-                        <i class="fas fa-user-circle fa-lg"></i>
-                        <p>${user.getName().split(" ")[0]}</p> <!-- Muestra el nombre del usuario logueado. -->
-                    </button>
-                </div>`
-        }
+            const fondo = new Image(); // Crea una nueva imagen.
+            fondo.src = `./assets/img/banner${contador}.jpg`; // Precarga la imagen de fondo según el contador.
 
-        // Agrega un evento al botón de "Dashboard" para redirigir a la página correspondiente.
-        if(document.querySelector(".header-right")){
-            document.getElementById("dashboard").addEventListener("click", function(){
-                window.location.href = dashboard; // Redirige al Dashboard o al Login según el caso.
+            // Cuando la imagen se carga, se cambia el fondo del encabezado.
+            fondo.addEventListener("load", function(){
+                document.querySelector(".encabezado__banner").style.backgroundImage = `url('${fondo.src}')`;
             });
-        }
+
+            // Vuelve al primer banner después de la imagen 3.
+            if(contador == 4){
+                contador = 0; // Resetea el contador para que vuelva a comenzar.
+            }
+            
+        }, 6000); // Cambia la imagen cada 6 segundos.
+    }
+            
+}
+
+// Lógica específica para la página "nosotros.html" o "nosotros".
+if(page == "nosotros.html" || page == "nosotros"){
+    menuSessionUser("./dashboard.html", "./login.html"); // Muestra el menú con la opción de Dashboard o login dependiendo del estado de sesión.
+}
+
+// Función para manejar el estado del menú y la sesión del usuario.
+function menuSessionUser(dashboard){
+    // Verifica si hay un usuario logueado en sessionStorage.
+    if(sessionStorage.getItem("user")){ 
+        user = findUser(); // Busca el usuario en el sessionStorage.
+
+        // Si hay un usuario logueado, ocultar la sección de "usuario no logeado" y mostrar el nombre de usuario.
+        document.querySelector(".encabezado__usuario").style.display = "none"; // Oculta el área de usuario no logeado.
+        if(window.innerWidth > 768){
+            // Si el ancho de la ventana es mayor a 768px, oculta el botón del menú en el dispositivo de escritorio.
+            document.querySelector(".btn-menu").style.display = "none";
+        } 
+        // Modifica el menú de la barra superior para mostrar el nombre del usuario y el acceso al dashboard.
+        document.getElementById("barra").innerHTML += `
+            <div class="header-right">
+                <button class="btn-icon" title="Dashboard" id="dashboard">
+                    <i class="fas fa-user-circle fa-lg"></i>
+                    <p>${user.getName().split(" ")[0]}</p> <!-- Muestra el nombre del usuario logueado. -->
+                </button>
+            </div>`
     }
 
-    // Lógica para el menú móvil (desplegar el sidebar).
-    document.getElementById("menuButton").addEventListener("click", function(){ 
-        const sidebar = document.getElementById("menu"); // Obtiene el sidebar del menú.
+    // Agrega un evento al botón de "Dashboard" para redirigir a la página correspondiente.
+    if(document.querySelector(".header-right")){
+        document.getElementById("dashboard").addEventListener("click", function(){
+            window.location.href = dashboard; // Redirige al Dashboard o al Login según el caso.
+        });
+    }
+}
 
-        // Si el sidebar está oculto o en estado de "none", se muestra y agrega una animación.
-        if(sidebar.style.display == "" || sidebar.style.display == "none"){
-            sidebar.style.display = "flex"; // Muestra el sidebar.
+// Lógica para el menú móvil (desplegar el sidebar).
+document.getElementById("menuButton").addEventListener("click", function(){ 
+    const sidebar = document.getElementById("menu"); // Obtiene el sidebar del menú.
 
-            // Agrega la clase "effect" después de un pequeño retraso para animar la transición.
-            setTimeout(() => {
-                sidebar.classList.add("effect");
-            }, 10);
-        } else if(sidebar.style.display == "flex"){
-            // Si el sidebar ya está visible, se remueve la animación.
-            sidebar.classList.remove("effect");
+    // Si el sidebar está oculto o en estado de "none", se muestra y agrega una animación.
+    if(sidebar.style.display == "" || sidebar.style.display == "none"){
+        sidebar.style.display = "flex"; // Muestra el sidebar.
 
-            // Al finalizar la animación, se oculta el sidebar.
-            sidebar.addEventListener('transitionend', function() {
-                sidebar.style.display = ""; // Oculta completamente después de la transición.
-            }, { once: true }); // Solo ejecuta esta acción una vez.
-        }
-    });
+        // Agrega la clase "effect" después de un pequeño retraso para animar la transición.
+        setTimeout(() => {
+            sidebar.classList.add("effect");
+        }, 10);
+    } else if(sidebar.style.display == "flex"){
+        // Si el sidebar ya está visible, se remueve la animación.
+        sidebar.classList.remove("effect");
 
-    // Cierra la animación de loading después de que el contenido haya cargado.
-    closeloading();
+        // Al finalizar la animación, se oculta el sidebar.
+        sidebar.addEventListener('transitionend', function() {
+            sidebar.style.display = ""; // Oculta completamente después de la transición.
+        }, { once: true }); // Solo ejecuta esta acción una vez.
+    }
 });
+
+// Cierra la animación de loading después de que el contenido haya cargado.
+closeloading();
 
 //Variables Iniciales:
 //user: Se inicializa como un objeto vacío, que más tarde se llenará con los datos del usuario si está logueado.

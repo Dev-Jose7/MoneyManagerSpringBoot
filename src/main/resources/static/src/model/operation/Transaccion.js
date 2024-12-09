@@ -1,5 +1,6 @@
 import TransactionManager from "./TransactionManager.js";
 import TransactionFilter from "./TransactionFilter.js";
+import { receiveData } from "../../controller/api.js";
 
 // Clase que representa una transacción financiera.
 export default class Transaccion {
@@ -27,7 +28,6 @@ export default class Transaccion {
             this.category = categoria; // Asigna la categoría de la transacción.
             this.date = fecha; // Asigna la fecha de la transacción.
             Transaccion.transactionData.push(this); // Agrega la transacción al arreglo global.
-            Transaccion.saveDataSession(); // Guarda la sesión de las transacciones.
         } else {
             this.listTransactions = []; // Lista de transacciones del usuario.
             this.listFilter = []; // Lista filtrada de transacciones.
@@ -38,28 +38,23 @@ export default class Transaccion {
         }
     }
 
-    // Método estático para guardar las transacciones en sessionStorage.
-    static saveDataSession() {
-        sessionStorage.setItem("transactions", JSON.stringify(Transaccion.getTransactionsUser()));
-        //Guarda en sessionStorage la base de datos de las transacciones (transactionData) cuando haya modificaciones en esta (crear, modificar o eliminar una transacción). Esto con el fin de conservar los valores que se hayan almacenado en la base de datos para poder utilizarlos en una nueva página.
-    }
-
-    // Método estático para cargar las transacciones desde sessionStorage.
+    // Método estático para obtener las transacciones al servidor.
     static loadDataSession() {
-        try {
-            let data = JSON.parse(sessionStorage.getItem("transactions"));
-            for (let i = 0; i < data.length; i++) {
-                new Transaccion(data[i].id, data[i].type, data[i].value, data[i].description, data[i].category, data[i].date)
-            }
-        } catch (error) {
-            // Manejo del error si las transacciones no pueden ser cargadas
-            // Esto por si el arreglo (data) esta vacío, ya que si esta vacio la propiedad length no es valida para el arreglo y arrojara error
-        }
-
-
-        //Carga en la base de datos (transactionData) el elemento almacenado en sessionStorage (gestionado por saveDataSession). Esto con el fin de entregar a la base de datos todos los valores que fueron añadidos a la esta antes de recargar la pagina, esto permite a la base de datos mantenerse actualizada constantemente
-        //Función que reconstruye una instancia después de ser transformada nuevamente a su valor original (JSON.parse). Esto debido a que las instancias se encontraban almacenadas en formato JSON (JSON.stringify)
-        //JSON transforma la base de datos en una cadena de caracteres para que sessionStorage pueda almacenarla y al transformarla nuevamente a su valor original (arreglo de objetos), los objetos no conservarán sus métodos de clase ya que se pierde la instancia del objeto al momento de la conversion al intentar almacenar la base de datos en sessionStorage
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        return new Promise(resolve => {
+            receiveData("GET", `transactions/user/${user[0].id}`)
+                .then(response => {
+                    if(response.ok){
+                        response.json().then(transaction => {
+                            for (let i = 0; i < transaction.length; i++) {
+                                new Transaccion(transaction[i].id, transaction[i].type, transaction[i].value, transaction[i].description, transaction[i].category, transaction[i].date)
+                            }
+                            resolve();
+                        })
+                    }
+                    
+                })
+        })
     }
 
     // Métodos para obtener los atributos de la transacción.
