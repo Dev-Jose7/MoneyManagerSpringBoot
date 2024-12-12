@@ -61,6 +61,11 @@ public class TransactionService {
         return transactionRepository.findByUser_IdAndValueBetween(userId, minValue, maxValue);
     }
 
+    // Consultar transacciones por usuario y año
+    public List<Transaction> findTransactionsByUserIdAndYear(Long userId, int year) {
+        return transactionRepository.findByUserIdAndYear(userId, year);
+    }
+
     // Actualizar una transacción existente
     @Transactional
     public Transaction updateTransaction(Long id, Transaction updatedTransaction) {

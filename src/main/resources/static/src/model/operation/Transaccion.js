@@ -42,7 +42,7 @@ export default class Transaccion {
     static loadDataSession() {
         let user = JSON.parse(sessionStorage.getItem("user"));
         return new Promise(resolve => {
-            receiveData("GET", `transactions/user/${user[0].id}`)
+            receiveData("GET", `transactions/user/${user[0].id}/year/${new Date().getFullYear()}`)
                 .then(response => {
                     if(response.ok){
                         response.json().then(transaction => {

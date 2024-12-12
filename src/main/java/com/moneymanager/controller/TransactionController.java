@@ -40,6 +40,17 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
+    // Obtener transacciones por usuario y año
+    @GetMapping("/user/{userId}/year/{year}")
+    public ResponseEntity<List<Transaction>> getTransactionsByUserIdAndYear(
+            @PathVariable Long userId, @PathVariable int year) {
+        List<Transaction> transactions = transactionService.findTransactionsByUserIdAndYear(userId, year);
+        if (!transactions.isEmpty()) {
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     // Obtener transacciones por tipo (Ingreso/Gasto)
     @GetMapping("/type/{type}")
     public ResponseEntity<List<Transaction>> getTransactionsByType(@PathVariable String type) {

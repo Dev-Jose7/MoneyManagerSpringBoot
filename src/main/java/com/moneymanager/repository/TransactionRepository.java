@@ -28,4 +28,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT SUM(t.value) FROM Transaction t WHERE t.user.id = :userId AND t.type = :type")
     Double sumTransactionsByTypeAndUserId(@Param("userId") Long userId, @Param("type") String type);
+
+    @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId AND YEAR(t.date) = :year")
+    List<Transaction> findByUserIdAndYear(@Param("userId") Long userId, @Param("year") int year);
 }
