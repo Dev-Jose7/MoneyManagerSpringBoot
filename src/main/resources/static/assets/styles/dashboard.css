@@ -141,6 +141,11 @@ thead{
     align-items: center;
 }
 
+.custom-select-container{
+    display: flex;
+    gap: 2vw;
+}
+
 .custom-select {
     padding: 10px 24px 10px 10px;
     border: 1px solid #ccc;
@@ -1023,6 +1028,10 @@ select{
         font-size: 24px;
     }
 
+    .custom-select-container{
+        gap: 1vw;
+    }
+
     .sidebar {
         display: block;
         visibility: unset;
@@ -1041,18 +1050,6 @@ select{
         font-size: 8vw;
         margin: 2vh 0;
     }
-
-    /* .info-row:nth-child(2) .info-group{
-        text-align: center;
-    }
-
-    .info-row:first-of-type .info-group:nth-last-of-type(2){
-        text-align: center;
-    }
-
-    .info-row:first-of-type .info-group:last-of-type{
-        text-align: end;
-    } */
 
     .header-right{
         gap: unset;

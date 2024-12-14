@@ -1,9 +1,7 @@
-import { monthLoad, printCategory, updateValues, user, tipo, valor, categoria, fecha, descripcion, sizePage, menuButton, printNameUser, alertConfirm, pagination, ingresosByMonth, gastosByMonth, transactionByMonth, textFormat, dataByMonth, calculateBalance, modalCancel, updateListUser, month, noteAction, logout} from "../../assets/js/panel.js"; // Importa funciones y variables del panel y utilidades.
+import { monthLoad, printCategory, updateValues, user, tipo, valor, categoria, fecha, descripcion, sizePage, menuButton, printNameUser, alertConfirm, pagination, ingresosByMonth, gastosByMonth, transactionByMonth, textFormat, dataByMonth, calculateBalance, modalCancel, updateListUser, month, noteAction, logout, setDateInput} from "../../assets/js/panel.js"; // Importa funciones y variables del panel y utilidades.
 import { alertShow } from "../../assets/js/util.js"; // Importa una función para mostrar alertas.
 import { sendData, receiveData } from "../controller/api.js";
 import Category from "../model/tag/Category.js";
-
-
 
 let page = document.location.href; // Obtiene la URL de la página actual.
 export let statusTransaction = false; // Variable de estado que indica si estamos en la página de transacciones.
@@ -36,6 +34,7 @@ if(page.includes("transaction")){ // Verifica si la URL contiene "transaction" p
     printNameUser();
     updateListUser();
     logout();
+    setDateInput(fechaFilter);
     monthLoad(); // Carga el mes actual al dashboard y asigna un evento para cambiar el mes.
     updateValues(); // Filtra, calcula e imprime las transacciones del usuario.
     printCategory(); // Imprime las categorías de transacciones.

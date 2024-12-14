@@ -1,4 +1,5 @@
 // Importación de módulos para manejar usuarios, transacciones, categorías, y vistas
+import { receiveData } from "../../src/controller/api.js";
 import User from "../../src/model/account/User.js";
 import Transaccion from "../../src/model/operation/Transaccion.js";
 import Category from "../../src/model/tag/Category.js";
@@ -27,7 +28,7 @@ export let gastosByMonth = []; // Array para los gastos del mes
 // Llamadas iniciales para verificar la sesión y cargar datos persistentes
 checkSession(); // Revisa si hay un usuario en el sessionStorage para continuar
 await User.loadDataSession(); // Carga datos de usuario
-await Transaccion.loadDataSession(); // Carga las transacciones previas
+await Transaccion.loadDataSession(null); // Carga las transacciones previas
 await Category.loadDataSession(); // Carga las categorías disponibles
 // Estos métodos al tener asociado un await hace que la ejecución de todo el script se pause hasta que las promesas que retornan estos métodos sea resuelta por la operación asíncrona resolve()
 // Este tipo de await se conece como top-level await y permite obtener los recursos necesarios antes de iniciar con el resto de operaciones que necesitan de estos recursos 
@@ -77,16 +78,74 @@ export function menuButton(){
 
 // Función que establece el mes actual en el selector y agrega un listener para actualizar datos cuando cambie
 export function monthLoad(){
-    let date = new Date();
-    month.value = date.getMonth() + 1; // Establece el mes actual como valor por defecto
-
-    // Si estamos en las páginas de Dashboard, Transacciones o Cuenta, agregamos un listener para el cambio de mes
-    if(statusDashboard || statusTransaction || statusAccount){
-        month.addEventListener("change", function(){
-            updateValues(); // Actualiza las transacciones y balance cuando se cambia el mes
-        });
+    let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    for (let i = 0; i < new Date().getMonth()+1; i++) {
+        month.innerHTML += `<option ${i+1 <= 9 ? `value="0${i+1}"` : `value="${i+1}"`}>${meses[i]}</option>`
     }
-} 
+
+    month.innerHTML += `<option value="0">Año completo</option>`
+
+    if(JSON.parse(sessionStorage.getItem("optionYear"))){
+        month.value = 0;
+    } else {
+        month.value = new Date().getMonth() + 1; // Establece el mes actual como valor por defecto
+    }
+
+    // Si estamos en las páginas de Dashboard, Transacciones, Estadisticas o Cuenta , agregamos un listener para el cambio de mes
+    month.addEventListener("change", function(){
+        updateValues(); // Actualiza las transacciones y balance cuando se cambia el mes
+        if(month.value == 0){
+            sessionStorage.setItem("optionYear", true);
+        } else {
+            sessionStorage.setItem("optionYear", false);
+        }
+    });
+}
+
+// Función para obtener e imprimir los años en que el usuario a registrado transacciones y así filtrarlas de acuerdo al año
+export function yearLoad(){
+    return new Promise((resolve, reject) => {
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        receiveData("GET", `transactions/user/${user[0].id}`).then(response => {
+            if(response.ok){
+                let years = [];
+                response.json().then(data => {
+                    data.forEach(transaction => {
+                        // console.log([...transaction.date])
+                        let date = transaction.date
+                        let year = date.substring(0, date.indexOf("-"));
+                        if(!years.includes(year)){
+                            years.push(year);
+                        }
+                    });
+    
+                    years.forEach(year => {
+                        try {
+                            document.getElementById("year").innerHTML += `<option value="${year}">${year}</option>`
+                            document.getElementById("year").value = new Date().getFullYear();
+                        } catch (error) {
+                            
+                        }
+                        
+                    });
+    
+                    resolve();
+                });
+            } else {
+                reject();
+            }
+        })
+    })
+}
+
+// Función para limitar los input de tipo date
+export function setDateInput(fecha){
+    let year = new Date().getFullYear();
+    let month = new Date().getMonth()+1;
+    let day = new Date().getDate();
+    fecha.setAttribute("min", `${year}-01-01`);
+    fecha.setAttribute("max", `${year}-${month}-${day}`);
+}
 
 // Función que actualiza la lista de transacciones y categorías para el usuario actual
 export function updateListUser(){
@@ -95,22 +154,25 @@ export function updateListUser(){
 
 // Función que filtra las transacciones del mes en curso y calcula el balance entre ingresos y gastos
 export function updateValues(){ 
-    dataByMonth(Transaccion.getTransactionsUser()); // Filtra las transacciones por mes
+    dataByMonth(Transaccion.getTransactionsUser()); // Filtra las transacciones por mes y a su vez por tipo (ingreso/gasto)
     calculateBalance(ingresosByMonth, gastosByMonth); // Calcula el balance entre ingresos y gastos
 }
 
 // Función que filtra las transacciones del mes seleccionado
 export function dataByMonth(data){
-    transactionByMonth = data.filter(transaction => {
-        const fecha = transaction.getDate(); // Obtiene la fecha de la transacción
-        // Filtra las transacciones por el mes seleccionado
-        if(fecha.substring(fecha.indexOf("-")+1, fecha.lastIndexOf("-")) == month.value){
-            return true;
-        }
-    });
-
-    // Ordena las transacciones por fecha (de mayor a menor)
-    orderTransaction("mayor");
+    if(month.value != "0"){
+        transactionByMonth = data.filter(transaction => {
+            const fecha = transaction.getDate(); // Obtiene la fecha de la transacción
+            // Filtra las transacciones por el mes seleccionado
+            if(fecha.substring(fecha.indexOf("-")+1, fecha.lastIndexOf("-")) == month.value){
+                return true;
+            }
+        });
+        // Ordena las transacciones por fecha (de mayor a menor)
+        orderTransaction("mayor");
+    } else {
+        transactionByMonth = data;
+    }
 
     // Filtra las transacciones en dos grupos: ingresos y gastos
     ingresosByMonth = transactionByMonth.filter(transaction => transaction.getType() == "Ingreso");
@@ -293,6 +355,30 @@ export function orderTransaction(order){
     }
 }
 
+export function orderTransactionAll(order) {
+    transactionByMonth.sort((a, b) => {
+        const [monthA, dayA] = a.getDate().split("-").map(Number);
+        const [monthB, dayB] = b.getDate().split("-").map(Number);
+
+        if (order === "mayor") {
+            // Primero comparamos el mes en orden descendente
+            if (monthB !== monthA) {
+                return monthB - monthA;
+            }
+            // Si los meses son iguales, comparamos los días en orden descendente
+            return dayB - dayA;
+        } else if (order === "menor") {
+            // Primero comparamos el mes en orden ascendente
+            if (monthA !== monthB) {
+                return monthA - monthB;
+            }
+            // Si los meses son iguales, comparamos los días en orden ascendente
+            return dayA - dayB;
+        }
+    });
+}
+
+
 // Función que muestra la descripción de una transacción en un modal
 export function noteAction(id){
     let transaction = user.getTransactions().findTransaction(id);
@@ -386,7 +472,9 @@ export function confirmShow(heading, message, id){
     });
 }
 
-closeloading(); // Cierra la barra de carga cuando todos los scripts y el DOM estén cargados
+if(!document.location.href.includes("estadisticas")){
+    closeloading(); // Cierra la barra de carga cuando todos los scripts y el DOM estén cargados
+}
 
 //1. Manejo de la sesión del usuario
 //checkSession(): Verifica si hay un usuario logueado en el sessionStorage y, si no, lo redirige al login.

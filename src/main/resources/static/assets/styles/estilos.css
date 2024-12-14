@@ -312,6 +312,10 @@ input[type="radio"]:hover {
     transition: color 0.2s ease;
 }
 
+.chart label:first-of-type{
+    margin-left: 0;
+}
+
 .chart label:hover {
     color: #4CAF50;  /* Color verde en hover */
 }

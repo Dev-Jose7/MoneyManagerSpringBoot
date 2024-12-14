@@ -1,4 +1,6 @@
-import { dataByMonth, filterData, gastosByMonth, ingresosByMonth, logout, menuButton, modalCancel, monthLoad, orderTransaction, printCategory, printNameUser, transactionByMonth, updateListUser, updateValues, user } from "../../assets/js/panel.js"; // Importa varias funciones y variables para gestionar la interfaz y transacciones del panel.
+import { dataByMonth, filterData, gastosByMonth, ingresosByMonth, logout, menuButton, modalCancel, monthLoad, yearLoad, orderTransaction, printCategory, printNameUser, transactionByMonth, updateListUser, updateValues, user } from "../../assets/js/panel.js"; // Importa varias funciones y variables para gestionar la interfaz y transacciones del panel.
+import { alertShow, closeloading } from "../../assets/js/util.js";
+import { receiveData } from "../controller/api.js";
 import Transaccion from "../model/operation/Transaccion.js";
 import Category from "../model/tag/Category.js";
 import { generateChart } from "./charts.js"; // Importa la función para generar gráficos usando la librería Chart.js.
@@ -6,6 +8,11 @@ import { generateChart } from "./charts.js"; // Importa la función para generar
 let page = document.location.href // Obtiene la URL de la página actual.
 export let statusStatistics = false // Variable de estado que indica si estamos en la página de estadísticas.
 
+try {
+    await yearLoad();
+} catch (error) {
+    alertShow("Error", "Carga de transacciones fallida, inténtelo de nuevo", "error");
+}
 
 if(page.includes("estadisticas")){ // Verifica si la URL contiene "estadisticas" para ejecutar el código relacionado con la vista de estadísticas.
     statusStatistics = true // Cambia el estado a verdadero si estamos en la página de estadísticas.
@@ -18,11 +25,25 @@ if(page.includes("estadisticas")){ // Verifica si la URL contiene "estadisticas"
     updateListUser();
     logout();
     modalCancel();
-    monthLoad()
-    dataByMonth(Transaccion.getTransactionsUser()); // Carga los datos de las transacciones del usuario por mes.
+    monthLoad();
+    updateValues();
 
     // Organiza las transacciones por fecha de registro (de menor a mayor).
     orderTransaction("menor");
+
+    // Registra evento al select de años para obtener las transacciones del año seleccionado
+    document.getElementById("year").addEventListener("change", async function(){
+        try {
+            await Transaccion.loadDataSession(document.getElementById("year").value);
+        } catch (error) {
+            Transaccion.transactionData = [];
+            alertShow("Sin registros", "No se encontrarón transacciones en el año seleccionado", "info")
+        }
+
+        updateValues(); // Actualiza los valores 
+        readGraph(); // Revisa qué gráfico está seleccionado por el usuario al cargar la página.
+        chartCategory(); // Muestra los gráficos de categoría (ingresos/gastos) por defecto.
+    });
     
     // Escucha el cambio de mes en el selector de mes para actualizar los datos y gráficos.
     document.getElementById("month").addEventListener("change", function(){
@@ -126,7 +147,10 @@ if(page.includes("estadisticas")){ // Verifica si la URL contiene "estadisticas"
         generateChart(document.querySelector(".container-cant"), graphValue, label, cant)
         generateChart(document.querySelector(".container-value"), graphValue, label, value)
     }
+
+    closeloading();
 }
+
 
 //Carga inicial de datos y configuraciones:
 //Inicializa varias funciones del panel como el menú, el nombre del usuario, la lista de usuarios, y la cancelación de modales.

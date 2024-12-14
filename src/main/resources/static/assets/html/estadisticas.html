@@ -52,23 +52,32 @@
         </aside>
 
         <section class="content">
+            <!-- cambio de mes -->
             <div class="user-panel">
                 <h2 id="titleMain">Reporte de <span>estadisticas</span></h2>
                 <div class="custom-select-container">
-                    <select id="month" class="custom-select">
-                        <option value="01">Enero</option>
-                        <option value="02">Febrero</option>
-                        <option value="03">Marzo</option>
-                        <option value="04">Abril</option>
-                        <option value="05">Mayo</option>
-                        <option value="06">Junio</option>
-                        <option value="07">Julio</option>
-                        <option value="08">Agosto</option>
-                        <option value="09">Septiembre</option>
-                        <option value="10" selected>Octubre</option>
-                        <option value="11">Noviembre</option>
-                        <option value="12">Diciembre</option>
+                    <select id="year" class="custom-select">
+                        <option value="2023">2023</option>
                     </select>
+                    
+                    <select id="month" class="custom-select">
+                    </select>
+                </div>
+            </div>
+
+            <!-- Balance -->
+            <div class="overview">
+                <div class="card saldo">
+                    <p>Saldo</p>
+                    <h3 id="saldo">$99900</h3>
+                </div>
+                <div class="card ingresos">
+                    <p>Ingresos</p>
+                    <h3 id="valorIngreso">$99900</h3>
+                </div>
+                <div class="card gastos">
+                    <p>Gastos</p>
+                    <h3 id="valorGasto">$99900</h3>
                 </div>
             </div>
 
@@ -76,9 +85,6 @@
             <div class="chart">
                 <h3>Tipo de estadisticas</h3>
                 <form>
-                    <!-- <input type="number" placeholder="Valor minimo (0)" min="0" id="minimoFilter">
-                    <input type="number" placeholder="Valor máximo" min="0" id="maximoFilter"> -->
-
                     <div class="chart-type">
                         <div class="chart-option">
                             <label for="optionType">Tipo</label>

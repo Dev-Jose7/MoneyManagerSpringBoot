@@ -1,5 +1,5 @@
 import { alertShow, textCurrency } from "../../assets/js/util.js";
-import { categoria, descripcion, fecha, menuButton, monthLoad, printCategory, printNameUser, updateValues, tipo, transactionByMonth, user, valor, updateListUser, modalCancel, logout, month } from "../../assets/js/panel.js";
+import { categoria, descripcion, fecha, menuButton, monthLoad, printCategory, printNameUser, updateValues, tipo, transactionByMonth, user, valor, updateListUser, modalCancel, logout, month, setDateInput } from "../../assets/js/panel.js";
 import { sendData } from "../controller/api.js";
 
 let page = document.location.href; // Obtiene la URL actual de la página.
@@ -18,6 +18,7 @@ if(page.includes("dashboard")){
 
     // Funciones específicas del dashboard.
     printWelcome(); // Muestra un mensaje de bienvenida personalizado.
+    setDateInput(fecha); //Configura el input fecha del formulario de añadir transacción hasta la fecha actual
     monthLoad(); // Carga el mes actual al dashboard y le agrega un evento para cambiar de mes.
     updateValues(); // Filtra, calcula y actualiza las transacciones del usuario.
     printCategory(); // Imprime las categorías de transacciones del usuario.

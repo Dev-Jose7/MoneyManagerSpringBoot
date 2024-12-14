@@ -35,8 +35,6 @@ export function initSession(account){
     console.log("Cuenta", account)
     //Almacena la información del usuario
     sessionStorage.setItem("user", JSON.stringify([{ id: account.id, name: account.name, email: account.email}]))
-    sessionStorage.setItem("transactions", JSON.stringify(account.transactions));
-    sessionStorage.setItem("categories", JSON.stringify(account.categories));
 
     //Después de 2 segundos, redirige al usuario a la página del dashboard
     setTimeout(() => {
@@ -48,9 +46,8 @@ export function initSession(account){
 export function endSession(url){
     // Elimina la información del usuario y bienvenida del sessionStorage
     sessionStorage.removeItem("user");
-    sessionStorage.removeItem("transactions");
-    sessionStorage.removeItem("categories");
     sessionStorage.removeItem("welcome");
+    sessionStorage.removeItem("optionYear");
 
     // Redirige a la URL especificada después de un tiempo de espera
     setTimeout(() => {

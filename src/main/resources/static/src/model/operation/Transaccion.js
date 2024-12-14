@@ -39,10 +39,12 @@ export default class Transaccion {
     }
 
     // Método estático para obtener las transacciones al servidor.
-    static loadDataSession() {
+    static loadDataSession(value) {
+        value == null ? value = new Date().getFullYear() : value;
+        
         let user = JSON.parse(sessionStorage.getItem("user"));
-        return new Promise(resolve => {
-            receiveData("GET", `transactions/user/${user[0].id}/year/${new Date().getFullYear()}`)
+        return new Promise((resolve, reject) => {
+            receiveData("GET", `transactions/user/${user[0].id}/year/${value}`)
                 .then(response => {
                     if(response.ok){
                         response.json().then(transaction => {
@@ -51,8 +53,9 @@ export default class Transaccion {
                             }
                             resolve();
                         })
+                    } else {
+                        reject();
                     }
-                    
                 })
         })
     }
