@@ -286,61 +286,156 @@ export function pagination(container, buttonContainer, vector, size, callback){
 }
 
 // Función que maneja la lógica de los botones de paginación e imprime secciones vacias cuando una página no puede llenarse por completo o no haya transacciones
-export function paginationDefault(container, buttonContainer, size){
+export function paginationDefault(container, buttonContainer, size) {
     let lastPage = container.lastChild;
-    
-    if(lastPage.children.length < size){ 
+
+    // Si la última página no está llena, completa con elementos vacíos
+    if (lastPage.children.length < size) {
         let diference = size - lastPage.children.length;
         for (let i = 0; i < diference; i++) {
-            let elemento =`
+            let elemento = `
                 <div class="list">
                     <h4>${statusTransaction ? (transactionByMonth.length == 0 && i == 0 ? "Sin registro" : "") : statusAccount ? (Category.getCategoriesUser().length == 0 && i == 0 ? "Sin registro" : "") : ""}</h4>
                     <p></p>
                     <p></p>
                     <p></p>
-                </div>`; //Si statusTransaction es true, entonces se valida no hay transacciones y si el iterador del ciclo es cero para entonces imprimir "Sin registro en el primer campo vacio de la primera página generada pero si statusAccount es true entonces validará si el usuario no tiene categorias para realizar el mismo proceso que con transaction"
-            lastPage.innerHTML += elemento; // Llena los espacios vacíos con una estructura base
+                </div>`;
+            lastPage.innerHTML += elemento;
         }
     }
 
-    if(lastPage.children.length == 0){
-        lastPage.children[0].textContent = "Sin transacciones"; // Muestra un mensaje si no hay transacciones
+    // Si no hay elementos, muestra un mensaje de "Sin transacciones"
+    if (lastPage.children.length == 0) {
+        lastPage.children[0].textContent = "Sin transacciones";
     }
-    
-    container.firstChild.style.display = "unset"; // Muestra la primera página por defecto
 
-    // Limpia los botones de paginación existentes antes de añadir nuevos
+    // Muestra la primera página por defecto
+    container.firstChild.style.display = "unset";
+
+    // Limpia los botones de paginación existentes
     buttonContainer.innerHTML = "";
 
-    // Crea los botones de acuerdo al número de páginas
+    // Crea los botones de paginación según el número de páginas
     for (let i = 0; i < container.children.length; i++) {
         let pageButton = document.createElement("button");
         pageButton.textContent = i + 1;
 
-        buttonContainer.appendChild(pageButton); // Añade cada botón de página
-        paginationButtons(container, buttonContainer); // Configura los botones
+        buttonContainer.appendChild(pageButton);
     }
+
+    // Si hay más de 4 botones de paginación, oculta algunos por defecto
+    if ([...buttonContainer.children].length > 4) {
+        [...buttonContainer.children].forEach((button, index) => {
+            // Configura el botón para mostrar el cuarto si se selecciona el tercero
+            if (index == 2 && buttonContainer.children[3].style.display == "") {
+                button.addEventListener("click", function () {
+                    buttonContainer.children[3].style.display = "unset"; // Muestra el cuarto botón
+                });
+            }
+
+            // Oculta los botones intermedios después del cuarto, excepto el último
+            if (index >= 4 && index < buttonContainer.children.length - 1) {
+                button.style.display = "none";
+            }
+
+            // Registra evento de tipo click a todos los botones para asi poder invocar al acortador de botones pasando argumentos necesarios como parametros
+            button.addEventListener("click", function (e) {
+                buttonsCut(buttonContainer, e)
+            });
+        });
+    }
+
+    // Llama a la función para manejar la lógica de los botones de paginación
+    paginationButtons(container, buttonContainer);
 }
 
+
 // Función que asigna la lógica de los botones de paginación
-export function paginationButtons(container, buttonContainer){
-    buttonContainer.addEventListener("click", function(e){
-        if(e.target.tagName == "BUTTON"){ // Solo responde a los clics en botones
-            [...container.children].forEach(page => { // Oculta todas las páginas antes de mostrar la seleccionada
+export function paginationButtons(container, buttonContainer) {
+    // Agrega un evento de clic al contenedor de botones de paginación
+    buttonContainer.addEventListener("click", function (e) {
+        if (e.target.tagName == "BUTTON") { // Verifica que el clic sea en un botón
+            // Oculta todas las páginas de contenido antes de mostrar la seleccionada
+            [...container.children].forEach(page => {
                 page.style.display = "none";
             });
 
-            [...buttonContainer.children].forEach(button => { // Resetea el estilo de los botones
+            // Reinicia el estilo de todos los botones de paginación
+            [...buttonContainer.children].forEach(button => {
                 button.style.transform = "none";
                 button.style.fontWeight = "unset";
                 button.style.boxShadow = "none";
             });
 
-            container.children[e.target.textContent-1].style.display = "unset"; // Muestra la página seleccionada
-            buttonContainer.children[e.target.textContent-1].style.transform = "scale(1.05)";
-            buttonContainer.children[e.target.textContent-1].style.fontWeight = "bold"; // Resalta el botón seleccionado
-            buttonContainer.children[e.target.textContent-1].style.boxShadow = "inset 0 4px 12px rgba(0, 0, 0, 0.3)";
-        }   
+            // Muestra la página correspondiente al botón seleccionado
+            container.children[e.target.textContent - 1].style.display = "unset";
+
+            // Resalta el botón seleccionado
+            buttonContainer.children[e.target.textContent - 1].style.transform = "scale(1.05)";
+            buttonContainer.children[e.target.textContent - 1].style.fontWeight = "bold";
+            buttonContainer.children[e.target.textContent - 1].style.boxShadow = "inset 0 4px 12px rgba(0, 0, 0, 0.3)";
+        }
+    });
+}
+
+// Función que se encarga de limitar la cantidad de botones que almacena el objeto contenedor de estos
+function buttonsCut(buttonContainer, e){
+    // Calcula los índices del primer y último botón
+    const lastButtonIndex = buttonContainer.children.length - 1;
+    const currentIndex = Number(e.target.textContent) - 1;
+
+    // Define los botones que estarán visibles (anterior, actual, siguiente)
+    const arrayButtons = [
+        buttonContainer.children[currentIndex - 1], // Botón anterior
+        buttonContainer.children[currentIndex],     // Botón actual
+        buttonContainer.children[currentIndex + 1], // Botón siguiente
+    ].filter(button => button); // Filtra para evitar botones nulos o undefined
+
+    // Función para mostrar u ocultar un botón específico
+    function toggleButton(index, show) {
+        if (index >= 0 && index <= lastButtonIndex) {
+            buttonContainer.children[index].style.display = show ? "unset" : "none";
+        }
+    }
+
+    // Añade eventos de clic dinámicos a los botones seleccionados
+    arrayButtons.forEach(button => {
+        button.addEventListener("click", function (event) {
+            const targetIndex = Number(event.target.textContent) - 1;
+
+            // Si se hace clic en el botón anterior y no está en el inicio
+            if (event.target === arrayButtons[0] && targetIndex > 0) {
+                toggleButton(targetIndex - 1, true); // Muestra el botón previo
+                toggleButton(targetIndex + 2, false); // Oculta el botón dos posiciones a la derecha
+
+                // Si está cerca del inicio, asegura que el botón siguiente esté visible
+                if (event.target.textContent == 2 && arrayButtons[2].style.display == "none") {
+                    arrayButtons[2].style.display = "unset";
+                }
+            }
+
+            // Si se hace clic en el botón siguiente y no está en el final
+            if (event.target === arrayButtons[2] && targetIndex < lastButtonIndex) {
+                toggleButton(targetIndex + 1, true); // Muestra el botón siguiente
+                toggleButton(targetIndex - 2, false); // Oculta el botón dos posiciones a la izquierda
+
+                // Si está cerca del final, asegura que el botón previo esté visible
+                if (event.target.textContent == lastButtonIndex && arrayButtons[0].style.display == "none") {
+                    arrayButtons[0].style.display = "unset";
+                }
+            }
+
+            // Siempre asegura que el primer botón esté visible
+            if (buttonContainer.children[0].style.display == "none") {
+                buttonContainer.children[0].style.display = "unset";
+            }
+
+            // Siempre asegura que el último botón y el penúltimo estén visibles
+            if (buttonContainer.children[lastButtonIndex].style.display == "none") {
+                buttonContainer.children[lastButtonIndex].style.display = "unset";
+                buttonContainer.children[lastButtonIndex - 1].style.display = "unset";
+            }
+        });
     });
 }
 
@@ -354,30 +449,6 @@ export function orderTransaction(order){
         transactionByMonth.sort((a, b) => a.getDate().substring(b.getDate().lastIndexOf("-")+1) - b.getDate().substring(a.getDate().lastIndexOf("-")+1));
     }
 }
-
-export function orderTransactionAll(order) {
-    transactionByMonth.sort((a, b) => {
-        const [monthA, dayA] = a.getDate().split("-").map(Number);
-        const [monthB, dayB] = b.getDate().split("-").map(Number);
-
-        if (order === "mayor") {
-            // Primero comparamos el mes en orden descendente
-            if (monthB !== monthA) {
-                return monthB - monthA;
-            }
-            // Si los meses son iguales, comparamos los días en orden descendente
-            return dayB - dayA;
-        } else if (order === "menor") {
-            // Primero comparamos el mes en orden ascendente
-            if (monthA !== monthB) {
-                return monthA - monthB;
-            }
-            // Si los meses son iguales, comparamos los días en orden ascendente
-            return dayA - dayB;
-        }
-    });
-}
-
 
 // Función que muestra la descripción de una transacción en un modal
 export function noteAction(id){
